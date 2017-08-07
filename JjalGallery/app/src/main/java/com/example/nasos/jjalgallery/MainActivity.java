@@ -19,7 +19,6 @@ public class MainActivity extends BaseActivity {
     Toolbar toolbar;
 
 
-
     @Override
     protected void initLayout() {
         setSupportActionBar(toolbar);
@@ -62,4 +61,14 @@ public class MainActivity extends BaseActivity {
         return R.layout.activity_main;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        moveTaskToBack(true);
+
+        finish();
+
+        android.os.Process.killProcess(android.os.Process.myPid()); 
+
+    }
 }

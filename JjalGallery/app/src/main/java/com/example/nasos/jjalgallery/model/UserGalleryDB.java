@@ -31,9 +31,30 @@ public class UserGalleryDB  {
         imageCursor = ctx.getContentResolver().query(
                 images, // 이미지 컨텐트 테이블
                 PROJECTION_BUCKET, // DATA, _ID를 출력
-                BUCKET_GROUP_BY,       // 모든 개체 출력
+                BUCKET_GROUP_BY,   // 모든 개체 출력
                 null,
-                BUCKET_ORDER_BY);      // 정렬 안 함
+                BUCKET_ORDER_BY);
         return imageCursor;
     }
+
+    public Cursor getAlbum(String albumName) {
+        String[] PROJECTION_BUCKET = {
+                MediaStore.Images.ImageColumns.BUCKET_ID,
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media._ID,
+                MediaStore.Images.ImageColumns.DATE_TAKEN  };
+
+        String orderBy = MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC";
+
+        imageCursor = ctx.getContentResolver().query(
+                images,
+                PROJECTION_BUCKET,
+                MediaStore.Images.ImageColumns.BUCKET_ID + "=?",
+                new String[]{albumName},
+                orderBy );
+
+        return imageCursor;
+    }
+
+
 }

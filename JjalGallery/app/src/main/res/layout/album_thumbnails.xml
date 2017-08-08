@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:scaleType="centerCrop"
-        android:id="@+id/album_thumbnail_img"/>
 
-    <TextView
-        android:id="@+id/album_thumbnail_name"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="130dp"
-        android:typeface="sans"
-        android:textColor="@color/white"
-        android:background="@color/ThemeWithTransparency" />
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/album_thumbnail_margin">
+
+        <ImageView
+            android:id="@+id/album_thumbnail_img"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/image_thumbnail"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/album_thumbnail_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/album_thumbnail_name_margin_top"
+            android:background="@color/grayTransparency"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:typeface="sans" />
+
+    </RelativeLayout>
 </RelativeLayout>

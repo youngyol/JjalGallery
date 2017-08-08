@@ -55,7 +55,11 @@ public class UserGalleryFragment extends BaseFragment {
         staggeredLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredLayoutManager);
         getPhotoList();
+        setListener();
 
+    }
+
+    private void setListener() {
     }
 
 

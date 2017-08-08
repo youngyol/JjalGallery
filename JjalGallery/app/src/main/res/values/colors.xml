@@ -3,10 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="mainTheme">#03A9F4</color>
+    <color name="mainTheme">#00AA8D</color>
     <color name="white">#ffffff</color>
-    <color name="subTheme">#039BE5</color>
-    <color name="subTheme2">#B3E5FC</color>
-    <color name="ThemeWithTransparency">#7d039be5</color>
+    <color name="subTheme">#00bf9a</color>
+    <color name="subTheme2">#1DE9B6</color>
+    <color name="ThemeWithTransparency">#7d1DE9B6</color>
     <color name="gray">#7E827A</color>
+    <color name="grayTransparency">#7d7E827A</color>
 </resources>

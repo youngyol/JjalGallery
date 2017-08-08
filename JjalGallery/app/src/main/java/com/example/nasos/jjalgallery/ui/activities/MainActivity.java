@@ -101,9 +101,7 @@ public class MainActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         moveTaskToBack(true);
-
         finish();
-
         android.os.Process.killProcess(android.os.Process.myPid());
 
     }

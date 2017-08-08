@@ -1,12 +1,18 @@
 package com.example.nasos.jjalgallery;
 
+import android.Manifest;
 import android.content.res.TypedArray;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.nasos.jjalgallery.ui.TabPagerAdapter;
 import com.example.nasos.jjalgallery.ui.base.BaseActivity;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 
@@ -21,6 +27,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initLayout() {
+        requestPermissions();
+        
         setSupportActionBar(toolbar);
         TypedArray tabIcons = getResources().obtainTypedArray(R.array.tabs_icon);
         for (int index = 0; index < 3; index++) {
@@ -30,6 +38,33 @@ public class MainActivity extends BaseActivity {
         makePagerAdapter();
     }
 
+    private void requestPermissions() {
+
+
+
+
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(MainActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+        };
+
+
+        new TedPermission(this)
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .check();
+    }
     private void makePagerAdapter() {
         // Creating TabPagerAdapter adapter
         TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -68,7 +103,7 @@ public class MainActivity extends BaseActivity {
 
         finish();
 
-        android.os.Process.killProcess(android.os.Process.myPid()); 
+        android.os.Process.killProcess(android.os.Process.myPid());
 
     }
 }

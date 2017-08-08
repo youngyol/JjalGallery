@@ -7,7 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
-import com.example.nasos.jjalgallery.ui.TabPagerAdapter;
+import com.example.nasos.jjalgallery.ui.adapters.TabPagerAdapter;
 import com.example.nasos.jjalgallery.ui.base.BaseActivity;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;

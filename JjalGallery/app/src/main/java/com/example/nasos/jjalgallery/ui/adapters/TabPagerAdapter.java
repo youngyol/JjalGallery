@@ -1,8 +1,10 @@
-package com.example.nasos.jjalgallery.ui;
+package com.example.nasos.jjalgallery.ui.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.example.nasos.jjalgallery.ui.fragment.UserGalleryFragment;
 
 /**
  * Created by nasos on 2017-08-07.

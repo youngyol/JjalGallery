@@ -1,4 +1,4 @@
-package com.example.nasos.jjalgallery.ui;
+package com.example.nasos.jjalgallery.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

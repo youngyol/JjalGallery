@@ -1,4 +1,4 @@
-package com.example.nasos.jjalgallery;
+package com.example.nasos.jjalgallery.ui.activities;
 
 import android.Manifest;
 import android.content.res.TypedArray;
@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.example.nasos.jjalgallery.R;
 import com.example.nasos.jjalgallery.ui.adapters.TabPagerAdapter;
 import com.example.nasos.jjalgallery.ui.base.BaseActivity;
 import com.gun0912.tedpermission.PermissionListener;

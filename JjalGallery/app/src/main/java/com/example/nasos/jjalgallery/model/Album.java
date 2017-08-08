@@ -35,7 +35,6 @@ public class Album {
     }
 
     public Album(String imgPath, String albumID, String albumName) {
-
         this.imgPath = imgPath;
         this.albumID = albumID;
         this.albumName = albumName;

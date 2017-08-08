@@ -1,4 +1,4 @@
-package com.example.nasos.jjalgallery.ui;
+package com.example.nasos.jjalgallery.ui.activities;
 
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
@@ -7,11 +7,15 @@ import android.util.Log;
 import com.andrognito.pinlockview.IndicatorDots;
 import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
-import com.example.nasos.jjalgallery.MainActivity;
 import com.example.nasos.jjalgallery.R;
 import com.example.nasos.jjalgallery.ui.base.BaseActivity;
 
 import butterknife.BindView;
+
+/**
+ * Created by nasos on 2017-08-08.
+ */
+
 
 public class PasswordActivity extends BaseActivity {
 

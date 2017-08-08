@@ -22,7 +22,7 @@ public class UserGalleryDB  {
         this.ctx = ctx;
     }
 
-    private Cursor getAlbumList() {
+    public Cursor getAlbumList() {
         String[] PROJECTION_BUCKET = {
                 MediaStore.Images.ImageColumns.BUCKET_ID,
                 MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,

@@ -1,5 +1,6 @@
 package com.example.nasos.jjalgallery.model;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -56,5 +57,31 @@ public class UserGalleryDB  {
         return imageCursor;
     }
 
+    public String getThumbnailPath(String imageId) {
+        String[] projection = {MediaStore.Images.Thumbnails.DATA};
+        ContentResolver contentResolver = ctx.getContentResolver();
+        // 원본 이미지의 _ID가 매개변수 imageId인 썸네일을 출력
+        Cursor thumbnailCursor = contentResolver.query(
+                MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, // 썸네일 컨텐트 테이블
+                projection, // DATA를 출력
+                MediaStore.Images.Thumbnails.IMAGE_ID + "=?", // IMAGE_ID는 원본 이미지의 _ID를 나타냅니다.
+                new String[]{imageId},
+                null);
+        String filePath = "";
+        int thumbnailPath = thumbnailCursor.getColumnIndex(projection[0]);
+        if (thumbnailCursor == null) {
+            // Error 발생
+        } else if (thumbnailCursor.moveToFirst()) {
+            do {
+                filePath = thumbnailCursor.getString(thumbnailPath);
+            } while (thumbnailCursor.moveToNext());
+        } else {
+        }
+        thumbnailCursor.close();
+        return filePath;
+    }
 
+    public void closeCursor(){
+        imageCursor.close();
+    }
 }

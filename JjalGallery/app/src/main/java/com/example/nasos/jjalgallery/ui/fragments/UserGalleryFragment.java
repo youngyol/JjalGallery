@@ -1,6 +1,7 @@
 package com.example.nasos.jjalgallery.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -9,12 +10,16 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.nasos.jjalgallery.R;
 import com.example.nasos.jjalgallery.model.Album;
+import com.example.nasos.jjalgallery.model.Images;
 import com.example.nasos.jjalgallery.model.UserGalleryDB;
+import com.example.nasos.jjalgallery.ui.activities.ImagesActivity;
 import com.example.nasos.jjalgallery.ui.adapters.AlbumsAdapter;
 import com.example.nasos.jjalgallery.ui.base.BaseFragment;
+import com.example.nasos.jjalgallery.util.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 
@@ -33,6 +38,8 @@ public class UserGalleryFragment extends BaseFragment {
     private ArrayList<Album> albumItemDatas;
     private StaggeredGridLayoutManager staggeredLayoutManager;
     private Context ctx;
+    private UserGalleryDB userGalleryQueryHelper;
+
 
     @BindView(R.id.rcv_album)
     RecyclerView recyclerView;
@@ -52,6 +59,7 @@ public class UserGalleryFragment extends BaseFragment {
 
     @Override
     protected void initLayout() {
+        userGalleryQueryHelper = new UserGalleryDB(ctx);
         staggeredLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredLayoutManager);
         getPhotoList();
@@ -60,6 +68,49 @@ public class UserGalleryFragment extends BaseFragment {
     }
 
     private void setListener() {
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(ctx, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        String tmppath = albumItemDatas.get(position).getAlbumID();
+                        Cursor albumImageCursor  = userGalleryQueryHelper.getAlbum(tmppath);
+                        ArrayList<Images> albumImages =  new ArrayList<Images>();
+
+                        int path = albumImageCursor.getColumnIndex(
+                                MediaStore.Images.Media.DATA);
+                        int imgId = albumImageCursor.getColumnIndex(
+                                MediaStore.Images.Media._ID);
+
+                        if (albumImageCursor.moveToFirst()) {
+
+                            do {
+                                String filePath = albumImageCursor.getString(path);
+                                String imgID = albumImageCursor.getString(imgId);
+                                String thumPath = userGalleryQueryHelper.getThumbnailPath(imgID);
+                                albumImages.add(new Images(thumPath, filePath, imgID));
+                            } while (albumImageCursor.moveToNext());
+
+                        }
+
+
+                        Toast.makeText(ctx,albumImages.get(0).getImgPath(),Toast.LENGTH_SHORT).show();
+
+
+                        Intent intent = new Intent(getActivity(), ImagesActivity.class);
+                        intent.putExtra("albumImages", albumImages);
+                        intent.putExtra("albumName", albumItemDatas.get(position).getAlbumName());
+                        getActivity().startActivity(intent);
+
+
+
+                    }
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                    }
+                }));
+
+
     }
 
 
@@ -70,27 +121,27 @@ public class UserGalleryFragment extends BaseFragment {
     }
 
     public void getPhotoList() {
-        Cursor imageCursor = new UserGalleryDB(ctx).getAlbumList();
+        Cursor albumCursor = userGalleryQueryHelper.getAlbumList();
         albumItemDatas = new ArrayList<Album>();
-        if (imageCursor.moveToFirst()) {
+        if (albumCursor.moveToFirst()) {
             String bucketName, bucketId, bucketData;
-            int bucketNameColumn = imageCursor.getColumnIndex(
+            int bucketNameColumn = albumCursor.getColumnIndex(
                     MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-            int bucketIDColumn = imageCursor.getColumnIndex(
+            int bucketIDColumn = albumCursor.getColumnIndex(
                     MediaStore.Images.Media.BUCKET_ID);
-            int dataColumn = imageCursor.getColumnIndex(
+            int dataColumn = albumCursor.getColumnIndex(
                     MediaStore.Images.Media.DATA);
             do {
                 // Get the field values
-                bucketName = imageCursor.getString(bucketNameColumn);
-                bucketData = imageCursor.getString(dataColumn);
-                bucketId = imageCursor.getString(bucketIDColumn);
+                bucketName = albumCursor.getString(bucketNameColumn);
+                bucketData = albumCursor.getString(dataColumn);
+                bucketId = albumCursor.getString(bucketIDColumn);
 
                 albumItemDatas.add(new Album(bucketData,bucketId,bucketName));
 
-            } while (imageCursor.moveToNext());
+            } while (albumCursor.moveToNext());
 
-            imageCursor.close();
+            albumCursor.close();
             albumsAdapter = new AlbumsAdapter(ctx,albumItemDatas);
             recyclerView.setAdapter(albumsAdapter);
         }

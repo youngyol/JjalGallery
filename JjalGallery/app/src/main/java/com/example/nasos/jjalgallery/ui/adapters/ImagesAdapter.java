@@ -1,16 +1,21 @@
 package com.example.nasos.jjalgallery.ui.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.example.nasos.jjalgallery.R;
 import com.example.nasos.jjalgallery.model.Images;
 import com.example.nasos.jjalgallery.ui.base.BaseAdapter;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,11 +45,33 @@ public class ImagesAdapter extends BaseAdapter<Images> {
         ImageViewHolder VHItem = (ImageViewHolder) holder;
 
         File imgFile = new File(items.get(position).getImgPath());
-        Glide.with(context)
-                .load(imgFile)
-                .placeholder(R.drawable.app_icon)
-                .error(R.drawable.app_icon)
-                .into(VHItem.imageThumbnail);
+
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.fromFile(imgFile))
+                .setResizeOptions(new ResizeOptions(200, 200))
+                .build();
+
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setImageRequest(request)
+                .setAutoPlayAnimations(true)
+                .build();
+        VHItem.imageThumbnail.setController(controller);
+
+
+//        if (items.get(position).getImageType().contains("gif")) {
+//            Glide.with(context)
+//                    .load(imgFile)
+//                    .asGif()
+//                    .placeholder(R.mipmap.ic_launcher)
+//                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                    .into(VHItem.imageThumbnail);
+//        } else {
+//            Glide.with(context)
+//                    .load(imgFile)
+//                    .placeholder(R.drawable.app_icon)
+//                    .error(R.drawable.app_icon)
+//                    .into(VHItem.imageThumbnail);
+//        }
+
 
     }
 
@@ -52,11 +79,13 @@ public class ImagesAdapter extends BaseAdapter<Images> {
 
     class ImageViewHolder  extends RecyclerView.ViewHolder {
         @BindView(R.id.image_thumbnail_user)
-        ImageView imageThumbnail;
+        SimpleDraweeView imageThumbnail;
         public ImageViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
     }
+
+
 }

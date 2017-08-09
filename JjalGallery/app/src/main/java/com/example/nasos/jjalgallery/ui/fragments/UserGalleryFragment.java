@@ -74,27 +74,31 @@ public class UserGalleryFragment extends BaseFragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         String tmppath = albumItemDatas.get(position).getAlbumID();
-                        Cursor albumImageCursor  = userGalleryQueryHelper.getAlbum(tmppath);
-                        ArrayList<Images> albumImages =  new ArrayList<Images>();
+                        Cursor albumImageCursor = userGalleryQueryHelper.getAlbum(tmppath);
+                        ArrayList<Images> albumImages = new ArrayList<Images>();
 
                         int path = albumImageCursor.getColumnIndex(
                                 MediaStore.Images.Media.DATA);
                         int imgId = albumImageCursor.getColumnIndex(
                                 MediaStore.Images.Media._ID);
 
+                        int imageType = albumImageCursor.getColumnIndex(
+                                MediaStore.Images.Media.MIME_TYPE);
                         if (albumImageCursor.moveToFirst()) {
 
                             do {
                                 String filePath = albumImageCursor.getString(path);
                                 String imgID = albumImageCursor.getString(imgId);
                                 String thumPath = userGalleryQueryHelper.getThumbnailPath(imgID);
-                                albumImages.add(new Images(thumPath, filePath, imgID));
+                                String imgType = albumImageCursor.getString(imageType);
+
+                                albumImages.add(new Images(thumPath, filePath, imgID, imgType));
                             } while (albumImageCursor.moveToNext());
 
                         }
 
 
-                        Toast.makeText(ctx,albumImages.get(0).getImgPath(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx, albumImages.get(0).getImgPath(), Toast.LENGTH_SHORT).show();
 
 
                         Intent intent = new Intent(getActivity(), ImagesActivity.class);
@@ -103,8 +107,8 @@ public class UserGalleryFragment extends BaseFragment {
                         getActivity().startActivity(intent);
 
 
-
                     }
+
                     @Override
                     public void onLongItemClick(View view, int position) {
                     }
@@ -137,12 +141,12 @@ public class UserGalleryFragment extends BaseFragment {
                 bucketData = albumCursor.getString(dataColumn);
                 bucketId = albumCursor.getString(bucketIDColumn);
 
-                albumItemDatas.add(new Album(bucketData,bucketId,bucketName));
+                albumItemDatas.add(new Album(bucketData, bucketId, bucketName));
 
             } while (albumCursor.moveToNext());
 
             albumCursor.close();
-            albumsAdapter = new AlbumsAdapter(ctx,albumItemDatas);
+            albumsAdapter = new AlbumsAdapter(ctx, albumItemDatas);
             recyclerView.setAdapter(albumsAdapter);
         }
 

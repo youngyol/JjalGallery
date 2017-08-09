@@ -43,7 +43,8 @@ public class UserGalleryDB  {
                 MediaStore.Images.ImageColumns.BUCKET_ID,
                 MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media._ID,
-                MediaStore.Images.ImageColumns.DATE_TAKEN  };
+                MediaStore.Images.ImageColumns.DATE_TAKEN,
+                MediaStore.Images.Media.MIME_TYPE  };
 
         String orderBy = MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC";
 

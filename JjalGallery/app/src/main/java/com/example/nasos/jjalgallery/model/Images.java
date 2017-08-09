@@ -7,17 +7,12 @@ import java.io.Serializable;
  */
 
 public class Images implements Serializable {
-    private  static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private String thumbnailImgPath;
     private String imgPath;
     private String imgID;
-
-    public Images(String thumbnailImgPath, String imgPath, String imgID) {
-        this.thumbnailImgPath = thumbnailImgPath;
-        this.imgPath = imgPath;
-        this.imgID = imgID;
-    }
+    private String imageType;
 
     public String getThumbnailImgPath() {
         return thumbnailImgPath;
@@ -41,5 +36,20 @@ public class Images implements Serializable {
 
     public void setImgID(String imgID) {
         this.imgID = imgID;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
+
+    public Images(String thumbnailImgPath, String imgPath, String imgID, String imageType) {
+        this.thumbnailImgPath = thumbnailImgPath;
+        this.imgPath = imgPath;
+        this.imgID = imgID;
+        this.imageType = imageType;
     }
 }

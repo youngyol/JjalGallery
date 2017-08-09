@@ -22,7 +22,6 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     }
     @Override
     public Fragment getItem(int position) {
-
         // Returning the current tabs
         switch (position) {
             case 0:
@@ -30,8 +29,8 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
             default:
                 return new UserGalleryFragment();
         }
-
     }
+
 
     @Override
     public int getCount() {

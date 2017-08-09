@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/album_thumbnail_margin">
 
-        <ImageView
+
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/album_thumbnail_img"
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_thumbnail"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            fresco:placeholderImage="@drawable/app_icon" />
+
 
         <TextView
             android:id="@+id/album_thumbnail_name"

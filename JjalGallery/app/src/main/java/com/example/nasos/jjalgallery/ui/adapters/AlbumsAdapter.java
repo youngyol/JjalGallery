@@ -1,17 +1,22 @@
 package com.example.nasos.jjalgallery.ui.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.nasos.jjalgallery.R;
 import com.example.nasos.jjalgallery.model.Album;
 import com.example.nasos.jjalgallery.ui.base.BaseAdapter;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,11 +46,21 @@ public class AlbumsAdapter extends BaseAdapter<Album>{
         AlbumViewHolder VHItem = (AlbumViewHolder) holder;
 
         File imgFile = new File(items.get(position).getImgPath());
-        Glide.with(context)
-                .load(imgFile)
-                .placeholder(R.drawable.app_icon)
-                .error(R.drawable.app_icon)
-                .into(VHItem.albumThumbnailImg);
+
+
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.fromFile(imgFile))
+                .setResizeOptions(new ResizeOptions(150, 100))
+                .build();
+
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setImageRequest(request)
+                .setAutoPlayAnimations(true)
+                .build();
+        VHItem.albumThumbnailImg.setController(controller);
+
+
+
+
 
         VHItem.albumNameTxt.setText(items.get(position).getAlbumName());
     }
@@ -54,7 +69,7 @@ public class AlbumsAdapter extends BaseAdapter<Album>{
 
     class AlbumViewHolder  extends RecyclerView.ViewHolder {
         @BindView(R.id.album_thumbnail_img)
-        ImageView albumThumbnailImg;
+        SimpleDraweeView albumThumbnailImg;
         @BindView(R.id.album_thumbnail_name)
         TextView albumNameTxt;
 

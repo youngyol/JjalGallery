@@ -2,6 +2,8 @@ package com.example.nasos.jjalgallery.ui.activities;
 
 import android.Manifest;
 import android.content.res.TypedArray;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -10,12 +12,14 @@ import android.widget.Toast;
 import com.example.nasos.jjalgallery.R;
 import com.example.nasos.jjalgallery.ui.adapters.TabPagerAdapter;
 import com.example.nasos.jjalgallery.ui.base.BaseActivity;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
     @BindView(R.id.pager)
@@ -27,9 +31,17 @@ public class MainActivity extends BaseActivity {
 
 
     @Override
-    protected void initLayout() {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         requestPermissions();
-        
+        Fresco.initialize(this);
+        setContentView(getActivityId());
+        ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void initLayout() {
+
         setSupportActionBar(toolbar);
         TypedArray tabIcons = getResources().obtainTypedArray(R.array.tabs_icon);
         for (int index = 0; index < 3; index++) {
@@ -40,23 +52,17 @@ public class MainActivity extends BaseActivity {
     }
 
     private void requestPermissions() {
-
-
-
-
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
                 Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
-
+                initLayout();
             }
-
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
                 Toast.makeText(MainActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
                 finish();
             }
-
         };
 
 

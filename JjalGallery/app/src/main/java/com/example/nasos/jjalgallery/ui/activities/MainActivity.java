@@ -41,7 +41,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initLayout() {
-
         setSupportActionBar(toolbar);
         TypedArray tabIcons = getResources().obtainTypedArray(R.array.tabs_icon);
         for (int index = 0; index < 3; index++) {
@@ -111,4 +110,6 @@ public class MainActivity extends BaseActivity {
         android.os.Process.killProcess(android.os.Process.myPid());
 
     }
+
+
 }

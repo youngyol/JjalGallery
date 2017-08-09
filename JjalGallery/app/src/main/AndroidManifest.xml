@@ -22,7 +22,7 @@
         <activity android:name=".ui.activities.PasswordActivity" />
         <activity android:name=".ui.activities.ImagesActivity" />
         <activity android:name=".ui.activities.DetailImageActivity" />
-        <activity android:name=".ui.fragments.ImageFragment"></activity>
+
     </application>
 
 </manifest>

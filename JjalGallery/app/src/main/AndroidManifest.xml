@@ -20,9 +20,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activities.PasswordActivity" />
-        <activity android:name=".ui.activities.ImagesActivity" />
+        <activity
+            android:name=".ui.activities.ImagesActivity"
+            android:parentActivityName=".ui.activities.MainActivity" />
         <activity android:name=".ui.activities.DetailImageActivity" />
-
+        <activity android:name=".ui.activities.SettingActivity"></activity>
     </application>
 
 </manifest>

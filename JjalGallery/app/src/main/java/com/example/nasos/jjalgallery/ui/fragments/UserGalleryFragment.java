@@ -10,7 +10,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.nasos.jjalgallery.R;
 import com.example.nasos.jjalgallery.model.Album;
@@ -33,6 +32,8 @@ import butterknife.Unbinder;
 
 
 public class UserGalleryFragment extends BaseFragment {
+
+
     private Unbinder unbinder;
     private AlbumsAdapter albumsAdapter;
     private ArrayList<Album> albumItemDatas;
@@ -43,6 +44,7 @@ public class UserGalleryFragment extends BaseFragment {
 
     @BindView(R.id.rcv_album)
     RecyclerView recyclerView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,7 +100,7 @@ public class UserGalleryFragment extends BaseFragment {
                         }
 
 
-                        Toast.makeText(ctx, albumImages.get(0).getImgPath(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(ctx, albumImages.get(0).getImgPath(), Toast.LENGTH_SHORT).show();
 
 
                         Intent intent = new Intent(getActivity(), ImagesActivity.class);

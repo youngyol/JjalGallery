@@ -49,7 +49,7 @@ public class AlbumsAdapter extends BaseAdapter<Album>{
 
 
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.fromFile(imgFile))
-                .setResizeOptions(new ResizeOptions(150, 100))
+                .setResizeOptions(new ResizeOptions(90, 90))
                 .build();
 
         DraweeController controller = Fresco.newDraweeControllerBuilder()

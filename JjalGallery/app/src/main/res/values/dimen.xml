@@ -9,7 +9,11 @@
     <dimen name="password_text_width">256dp</dimen>
     <dimen name="password_text_margin_top">36dp</dimen>
     <dimen name="password_text_size">34sp</dimen>
+    <dimen name="password_setting_text_size">18sp</dimen>
+    <dimen name="pw_txt">22sp</dimen>
 
+
+    <dimen name="password_setting_margin_top">50dp</dimen>
     <dimen name="pinlockview_margin_top">16dp</dimen>
     <dimen name="pinlockview_btn_size">72dp</dimen>
     <dimen name="pinlockview_txt_size">18dp</dimen>

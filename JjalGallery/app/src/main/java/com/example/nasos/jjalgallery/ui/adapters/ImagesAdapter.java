@@ -47,7 +47,7 @@ public class ImagesAdapter extends BaseAdapter<Images> {
         File imgFile = new File(items.get(position).getImgPath());
 
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.fromFile(imgFile))
-                .setResizeOptions(new ResizeOptions(200, 200))
+                .setResizeOptions(new ResizeOptions(90, 90))
                 .build();
 
         DraweeController controller = Fresco.newDraweeControllerBuilder()

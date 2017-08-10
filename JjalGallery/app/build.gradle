@@ -46,4 +46,6 @@ dependencies {
     compile 'com.facebook.fresco:animated-gif:1.4.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
+    compile 'com.zcw:togglebutton-library:1.0.0'
+
 }

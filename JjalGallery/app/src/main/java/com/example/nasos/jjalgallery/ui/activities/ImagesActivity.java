@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,11 +23,14 @@ public class ImagesActivity extends BaseActivity {
     private ArrayList<Images> albumImageItems;
     private StaggeredGridLayoutManager staggeredLayoutManager;
     private ImagesAdapter albumImagesAdapter;
+
+
     @BindView(R.id.rcv_images_user)
     RecyclerView recyclerView;
-
     @BindView(R.id.album_name_toolbar)
     TextView albumNameText;
+    @BindView(R.id.album_toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void initLayout() {
@@ -35,6 +39,16 @@ public class ImagesActivity extends BaseActivity {
         staggeredLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredLayoutManager);
 
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         Intent intent = getIntent();
         albumImageItems =(ArrayList<Images>)intent.getExtras().get("albumImages");
@@ -59,7 +73,6 @@ public class ImagesActivity extends BaseActivity {
                         intent.putExtra("albumImages", albumImageItems);
                             intent.putExtra("position", position);
                         startActivity(intent);
-
 
 
                     }

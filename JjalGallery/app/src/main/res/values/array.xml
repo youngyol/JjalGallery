@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="tabs_icon">
-        <item>@drawable/ic_jjal_selector</item>
-        <item>@drawable/ic_bookmark_selector</item>
-        <item>@drawable/ic_gallery_selector</item>
-  </array>
+
 </resources>

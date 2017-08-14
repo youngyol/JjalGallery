@@ -1,7 +1,9 @@
 package org.horaapps.leafpic.fragments;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,6 +28,10 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -45,6 +51,10 @@ public class ImageFragment extends Fragment {
 
     @BindView(R.id.photo_view)
     PhotoView photoView;
+
+
+    private int deviceWidth;
+    private int deviceHeight ;
 
     public static ImageFragment newInstance(Media media) {
         ImageFragment imageFragment = new ImageFragment();
@@ -113,6 +123,9 @@ public class ImageFragment extends Fragment {
                 //.transform(new RotateTransformation(getContext(), img.getOrientation(), false))
                 .animate(R.anim.fade_in)*/
 
+
+
+
         RequestOptions options = new RequestOptions()
                 .signature(img.getSignature())
                 //.centerCrop()
@@ -122,7 +135,7 @@ public class ImageFragment extends Fragment {
 
 
         Glide.with(getContext())
-                .load(img.getUri())
+                .load(resizeImage(img.getUri()))
                 .apply(options)
                 .listener(new RequestListener<Drawable>() {
                     @Override
@@ -180,6 +193,25 @@ public class ImageFragment extends Fragment {
 
             }
         });
+    }
+
+
+    public Bitmap resizeImage(
+            Uri tempImage) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4;
+        InputStream in = null;
+        try {
+            in = getActivity().getContentResolver().openInputStream(tempImage);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Bitmap bitmap = BitmapFactory.decodeStream(in, null, options);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 1, baos);
+
+        return bitmap;
     }
 
     private float getDoubleTapZoomScale() {

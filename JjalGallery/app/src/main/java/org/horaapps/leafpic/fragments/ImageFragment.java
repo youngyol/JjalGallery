@@ -135,7 +135,7 @@ public class ImageFragment extends Fragment {
 
 
         Glide.with(getContext())
-                .load(resizeImage(img.getUri()))
+                .load(img.getUri())
                 .apply(options)
                 .listener(new RequestListener<Drawable>() {
                     @Override

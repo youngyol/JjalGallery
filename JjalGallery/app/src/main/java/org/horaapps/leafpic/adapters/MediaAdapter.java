@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.koushikdutta.ion.Ion;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
@@ -182,25 +183,25 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
         if (f.isGif()) {
 
-            RequestOptions options = new RequestOptions()
-                    .signature(f.getSignature())
-                    .format(DecodeFormat.PREFER_ARGB_8888)
-                    .centerCrop()
-                    .placeholder(placeholder)
-                    //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+//            RequestOptions options = new RequestOptions()
+//                    .signature(f.getSignature())
+//                    .format(DecodeFormat.PREFER_ARGB_8888)
+//                    .centerCrop()
+//                    .placeholder(placeholder)
+//                    //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
+//                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
 
-//            Ion.with(holder.imageView.getContext())
-//                    .load(f.getPath())
-//                    .intoImageView(holder.imageView);
+            Ion.with(holder.imageView.getContext())
+                    .load(f.getPath())
+                    .intoImageView(holder.imageView);
 
             holder.gifIcon.setVisibility(View.VISIBLE);
 
-            Glide.with(holder.imageView.getContext())
-                    .load(f.getPath())
-                    .apply(options)
-                    .thumbnail(0.1f)
-                    .into(holder.imageView);
+//            Glide.with(holder.imageView.getContext())
+//                    .load(f.getPath())
+//                    .apply(options)
+//                    .thumbnail(0.5f)
+//                    .into(holder.imageView);
 
 //            File imgFile = new File(f.getPath());
 //            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.fromFile(imgFile))

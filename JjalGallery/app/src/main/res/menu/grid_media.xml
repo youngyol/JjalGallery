@@ -3,34 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.horaapps.leafpic.activities.MainActivity">
 
-    <item
-        android:id="@+id/filter_menu"
-        android:title="@string/filter_menu_title"
-        app:showAsAction="ifRoom">
-        <menu xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            tools:context="org.horaapps.leafpic.activities.MainActivity">
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/all_media_filter"
-                    android:checked="true"
-                    android:title="@string/all"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/video_media_filter"
-                    android:title="@string/videos"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/image_media_filter"
-                    android:title="@string/images"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/gifs_media_filter"
-                    android:title="@string/gifs"
-                    app:showAsAction="never" />
-            </group>
-        </menu>
-    </item>
+
 
     <item
         android:id="@+id/sort_action"
@@ -81,41 +54,12 @@
             android:title="@string/delete"
             app:showAsAction="ifRoom" />
 
-        <item
-            android:id="@+id/affix"
-            android:title="@string/affix"
-            android:visible="false"
-            app:showAsAction="never" />
-
-        <item
-            android:id="@+id/action_copy"
-            android:title="@string/copy_to"
-            app:showAsAction="never" />
-
-        <item
-            android:id="@+id/action_move"
-            android:title="@string/move_to"
-            app:showAsAction="never" />
     </group>
 
     <group android:id="@+id/one_selected_items">
 
-        <item
-            android:id="@+id/action_palette"
-            android:title="@string/palette"
-            android:visible="false"
-            app:showAsAction="never" />
 
-        <item
-            android:id="@+id/set_as_cover"
-            android:title="@string/set_preview"
-            android:visible="false"
-            app:showAsAction="never" />
 
-        <item
-            android:id="@+id/rename"
-            android:title="@string/rename"
-            app:showAsAction="never" />
     </group>
 
 

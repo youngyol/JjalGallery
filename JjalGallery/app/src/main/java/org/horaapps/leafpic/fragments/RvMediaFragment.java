@@ -23,14 +23,12 @@ import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
-import org.horaapps.leafpic.activities.PaletteActivity;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumsHelper;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
-import org.horaapps.leafpic.data.filter.FilterMode;
 import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
@@ -232,8 +230,7 @@ public class RvMediaFragment extends BaseFragment {
         menu.findItem(R.id.delete).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_delete)));
         menu.findItem(R.id.sharePhotos).setIcon(ThemeHelper.getToolbarIcon(getContext(),(GoogleMaterial.Icon.gmd_share)));
         menu.findItem(R.id.sort_action).setIcon(ThemeHelper.getToolbarIcon(getContext(),(GoogleMaterial.Icon.gmd_sort)));
-        menu.findItem(R.id.filter_menu).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_filter_list)));
-    }
+     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
@@ -250,11 +247,9 @@ public class RvMediaFragment extends BaseFragment {
                         ? R.string.clear_selected
                         : R.string.select_all);
         if (editMode) {
-            menu.findItem(R.id.filter_menu).setVisible(false);
-            menu.findItem(R.id.sort_action).setVisible(false);
+             menu.findItem(R.id.sort_action).setVisible(false);
         } else {
-            menu.findItem(R.id.filter_menu).setVisible(true);
-            menu.findItem(R.id.sort_action).setVisible(true);
+             menu.findItem(R.id.sort_action).setVisible(true);
 
             menu.findItem(R.id.ascending_sort_order).setChecked(sortingOrder() == SortingOrder.ASCENDING);
             switch (sortingMode()) {
@@ -272,29 +267,6 @@ public class RvMediaFragment extends BaseFragment {
 
         switch (item.getItemId()) {
 
-            case R.id.all_media_filter:
-                album.setFilterMode(FilterMode.ALL);
-                item.setChecked(true);
-                display();
-                return true;
-
-            case R.id.video_media_filter:
-                album.setFilterMode(FilterMode.VIDEO);
-                item.setChecked(true);
-                display();
-                return true;
-
-            case R.id.image_media_filter:
-                album.setFilterMode(FilterMode.IMAGES);
-                item.setChecked(true);
-                display();
-                return true;
-
-            case R.id.gifs_media_filter:
-                album.setFilterMode(FilterMode.GIF);
-                item.setChecked(true);
-                display();
-                return true;
 
             case R.id.sharePhotos:
                 Intent intent = new Intent();
@@ -310,18 +282,7 @@ public class RvMediaFragment extends BaseFragment {
                 startActivity(Intent.createChooser(intent, getResources().getText(R.string.send_to)));
                 return true;
 
-            case R.id.set_as_cover:
-                String path = adapter.getFirstSelected().getPath();
-                album.setCover(path);
-                db().setCover(album.getPath(), path);
-                adapter.clearSelected();
-                return true;
 
-            case R.id.action_palette:
-                Intent paletteIntent = new Intent(act, PaletteActivity.class);
-                paletteIntent.putExtra("imageUri", adapter.getFirstSelected().getUri().toString());
-                startActivity(paletteIntent);
-                return true;
 
             case R.id.select_all:
                 if (adapter.getSelectedCount() == adapter.getItemCount())

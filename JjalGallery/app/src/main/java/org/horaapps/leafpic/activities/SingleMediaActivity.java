@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +36,6 @@ import com.orhanobut.hawk.Hawk;
 import com.yalantis.ucrop.UCrop;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
@@ -46,9 +44,6 @@ import org.horaapps.leafpic.data.AlbumSettings;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.MediaHelper;
 import org.horaapps.leafpic.data.StorageHelper;
-import org.horaapps.leafpic.data.sort.SortingMode;
-import org.horaapps.leafpic.data.sort.SortingOrder;
-import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
@@ -258,10 +253,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         menu.findItem(R.id.action_delete).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_delete));
         menu.findItem(R.id.action_share).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
-        menu.findItem(R.id.action_rotate).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_right));
-        menu.findItem(R.id.rotate_right_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_right).color(getIconColor()));
-        menu.findItem(R.id.rotate_left_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_left).color(getIconColor()));
-        menu.findItem(R.id.rotate_180).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_replay).color(getIconColor()));
 
         return true;
     }
@@ -287,8 +278,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         if (customUri) {
             menu.setGroupVisible(R.id.on_internal_storage, false);
             menu.setGroupVisible(R.id.only_photos_options, false);
-            menu.findItem(R.id.sort_action).setVisible(false);
-        }
+         }
         return super.onPrepareOptionsMenu(menu);
 
     }
@@ -349,79 +339,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.rotate_180:
-                if (!((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(180)) {
-                    Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
-                }
-                break;
 
-            case R.id.rotate_right_90:
-                if (!((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(90)) {
-                    Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            case R.id.rotate_left_90:
-                if (!((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(-90)) {
-                    Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-
-            case R.id.action_copy:
-                SelectAlbumBuilder.with(getSupportFragmentManager())
-                        .title(getString(R.string.copy_to))
-                        .onFolderSelected(path -> {
-
-                            Media currentMedia = getCurrentMedia();
-                            boolean b = MediaHelper.copyMedia(getApplicationContext(), currentMedia, path);
-                            if (!b)
-                                Toast.makeText(getApplicationContext(), R.string.copy_error, Toast.LENGTH_SHORT).show();
-                        }).show();
-                break;
-
-            case R.id.name_sort_mode:
-                this.album.setDefaultSortingMode(getApplicationContext(), SortingMode.NAME);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.date_taken_sort_mode:
-                this.album.setDefaultSortingMode(getApplicationContext(), SortingMode.DATE);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.size_sort_mode:
-                this.album.setDefaultSortingMode(getApplicationContext(), SortingMode.SIZE);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.type_sort_action:
-                this.album.setDefaultSortingMode(getApplicationContext(), SortingMode.TYPE);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.numeric_sort_mode:
-                this.album.setDefaultSortingMode(getApplicationContext(), SortingMode.NUMERIC);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.ascending_sort_order:
-                this.album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked() ? SortingOrder.ASCENDING : SortingOrder.DESCENDING);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-
-                item.setChecked(!item.isChecked());
-                return true;
 
 
             case R.id.action_share:
@@ -439,19 +357,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 uCrop.start(SingleMediaActivity.this);
                 break;
 
-            case R.id.action_use_as:
-                Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
-                intent.setDataAndType(
-                        getCurrentMedia().getUri(), getCurrentMedia().getMimeType());
-                startActivity(Intent.createChooser(intent, getString(R.string.use_as)));
-                return true;
-
-            case R.id.action_open_with:
-                Intent intentopenWith = new Intent(Intent.ACTION_VIEW);
-                intentopenWith.setDataAndType(
-                        getCurrentMedia().getUri(), getCurrentMedia().getMimeType());
-                startActivity(Intent.createChooser(intentopenWith, getString(R.string.open_with)));
-                break;
 
             case R.id.action_delete:
                 final AlertDialog textDialog = AlertDialogsHelper.getTextDialog(SingleMediaActivity.this, R.string.delete, R.string.delete_photo_message);
@@ -482,89 +387,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 });
                 textDialog.show();
                 return true;
-
-            case R.id.action_move:
-                SelectAlbumBuilder.with(getSupportFragmentManager())
-                        .title(getString(R.string.move_to))
-                        .exploreMode(true)
-                        .force(true)
-                        .onFolderSelected(path -> {
-
-                            Media currentMedia = getCurrentMedia();
-
-                            boolean success = MediaHelper.moveMedia(getApplicationContext(), currentMedia, path);
-
-                            if (success) {
-                                media.remove(currentMedia);
-
-                                if (media.size() == 0) {
-                                    displayAlbums();
-                                }
-                            } else {
-                                Toast.makeText(getApplicationContext(), R.string.move_error, Toast.LENGTH_SHORT).show();
-                            }
-                            adapter.notifyDataSetChanged();
-                            updatePageTitle(mViewPager.getCurrentItem());
-                        }).show();
-
-                return true;
-
-            case R.id.action_rename:
-                final EditText editTextNewName = new EditText(getApplicationContext());
-                editTextNewName.setText(StringUtils.getPhotoNameByPath(getCurrentMedia().getPath()));
-
-                AlertDialog renameDialog = AlertDialogsHelper.getInsertTextDialog(this, editTextNewName, R.string.rename_photo_action);
-
-                renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (editTextNewName.length() != 0) {
-                            Media currentMedia = getCurrentMedia();
-                            boolean b = MediaHelper.renameMedia(getApplicationContext(), currentMedia, editTextNewName.getText().toString());
-                            if (!b) {
-                                StringUtils.showToast(getApplicationContext(), getString(R.string.rename_error));
-                                //adapter.notifyDataSetChanged();
-                            }
-                        } else
-                            StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
-                    }
-                });
-                renameDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel).toUpperCase(), (dialog, which) -> dialog.dismiss());
-                renameDialog.show();
-                break;
-
-            case R.id.action_edit_with:
-                Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                editIntent.setDataAndType(getCurrentMedia().getUri(), getCurrentMedia().getMimeType());
-                editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(editIntent, getString(R.string.edit_with)));
-                break;
-
-            case R.id.action_details:
-
-                final AlertDialog detailsDialog = AlertDialogsHelper.getDetailsDialog(this, getCurrentMedia());
-
-                detailsDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string
-                        .ok_action).toUpperCase(), (dialog, which) -> dialog.dismiss());
-
-                detailsDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.fix_date).toUpperCase(), (dialog, which) -> {
-                    // todo
-                    //if (!getCurrentMedia().fixDate())
-                    Toast.makeText(SingleMediaActivity.this, R.string.unable_to_fix_date, Toast.LENGTH_SHORT).show();
-                });
-
-                detailsDialog.show();
-                break;
-
-            case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                break;
-
-            case R.id.action_palette:
-                Intent paletteIntent = new Intent(getApplicationContext(), PaletteActivity.class);
-                paletteIntent.setData(getCurrentMedia().getUri());
-                startActivity(paletteIntent);
-                break;
 
             default:
                 // If we got here, the user's action was not recognized.

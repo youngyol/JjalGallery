@@ -121,10 +121,6 @@
 
     <group android:id="@+id/album_options_menu" android:visible="false">
         <item
-            android:id="@+id/hide"
-            android:title="@string/hide"
-            app:showAsAction="never" />
-        <item
             android:id="@+id/exclude"
             android:title="@string/exclude"
             app:showAsAction="never" />

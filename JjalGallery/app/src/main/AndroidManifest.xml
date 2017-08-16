@@ -140,15 +140,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="org.horaapps.leafpic.activities.BlackWhiteListActivity"
-            android:label="@string/chose_folders"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.ExcludedAlbums" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+
 
         <activity
             android:name="org.horaapps.leafpic.activities.PaletteActivity"

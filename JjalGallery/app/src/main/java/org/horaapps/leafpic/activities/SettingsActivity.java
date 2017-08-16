@@ -200,11 +200,6 @@ public class SettingsActivity extends ThemedActivity {
         updateUiElements();
     }
 
-    @OnClick(R.id.ll_white_list)
-    public void onWhiteListClicked(View view) {
-        startActivity(new Intent(getApplicationContext(), BlackWhiteListActivity.class));
-    }
-
     @OnClick(R.id.ll_custom_thirdAct)
     public void onCustomThirdActClicked(View view) {
         new SinglePhotoSetting(SettingsActivity.this).show();

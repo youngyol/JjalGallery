@@ -378,7 +378,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 uCrop.start(SingleMediaActivity.this);
                 break;
 
-            case R.id.action_bookmark: 
+            case R.id.action_bookmark:
                 media.get(position).setBookmark(!media.get(position).isBookmark());
                 checkBookmarkIcon();
                 break;

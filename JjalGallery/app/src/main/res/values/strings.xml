@@ -305,8 +305,10 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="location">Location</string>
 
     <!--DRAWER ITEMS -->
-    <string name="local_folder">Local Folders</string>
+    <string name="local_folder">사용자 갤러리</string>
     <string name="hidden_folder">Hidden Folders</string>
+    <string name="jjal_folder">짤 갤러리</string>
+    <string name="bookmark">북마크 갤러리</string>
     <string name="tags">Tags</string>
     <string name="timeline">Timeline</string>
     <string name="wallpapers">Wallpapers</string>

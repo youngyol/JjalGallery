@@ -62,8 +62,8 @@ public class SplashScreen extends SharedMediaActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        setNavBarColor();
-        setStatusBarColor();
+//        setNavBarColor();
+//        setStatusBarColor();
 
         if (PermissionUtils.isDeviceInfoGranted(this)) {
 
@@ -86,7 +86,7 @@ public class SplashScreen extends SharedMediaActivity {
         } else
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, Manifest.permission.READ_EXTERNAL_STORAGE);
 
-        //startLookingForMedia();
+//        startLookingForMedia();
     }
 
     private void start() {

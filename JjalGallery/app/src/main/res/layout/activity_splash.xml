@@ -15,7 +15,7 @@
             android:id="@+id/imgLogo"
             android:layout_width="175dp"
             android:layout_height="175dp"
-            android:src="@drawable/leaf_pic"
+            android:src="@drawable/app_icon"
             android:scaleType="fitXY" />
         <ProgressBar
             android:id="@+id/progress_splash"
@@ -35,5 +35,5 @@
         android:textSize="60sp"
         android:layout_marginBottom="25dp"
         />
-     -->
+        -->
 </RelativeLayout>

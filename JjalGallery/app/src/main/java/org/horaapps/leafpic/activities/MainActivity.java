@@ -315,16 +315,16 @@ public class MainActivity extends SharedMediaActivity {
         ((TextView) findViewById(R.id.Drawer_Default_Item)).setTextColor(color);
 //        ((TextView) findViewById(R.id.Drawer_Setting_Item)).setTextColor(color);
 //        ((TextView) findViewById(R.id.Drawer_Donate_Item)).setTextColor(color);
-        ((TextView) findViewById(R.id.Drawer_wallpapers_Item)).setTextColor(color);
-        ((TextView) findViewById(R.id.Drawer_hidden_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.Drawer_Bookmark_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.Drawer_JJal_Item)).setTextColor(color);
 
         /** ICONS **/
         color = getIconColor();
         ((IconicsImageView) findViewById(R.id.Drawer_Default_Icon)).setColor(color);
 //        ((IconicsImageView) findViewById(R.id.Drawer_Donate_Icon)).setColor(color);
 //        ((IconicsImageView) findViewById(R.id.Drawer_Setting_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.Drawer_wallpapers_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.Drawer_hidden_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.Drawer_Bookmark_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.Drawer_JJal_Icon)).setColor(color);
 
         setRecentApp(getString(R.string.app_name));
     }

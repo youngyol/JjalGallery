@@ -73,7 +73,7 @@
 
 
 
-                <!-- HIDDEN ALBUMS -->
+                <!-- JJAL ALBUMS -->
                 <LinearLayout
                     xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/ll_drawer_hidden"
@@ -85,28 +85,28 @@
                     >
 
                     <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/Drawer_hidden_Icon"
+                        android:id="@+id/Drawer_JJal_Icon"
                         android:layout_width="@dimen/icon_width_height"
                         android:layout_height="@dimen/icon_width_height"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/big_spacing"
                         android:layout_marginRight="@dimen/big_spacing"
-                        app:iiv_icon="faw-low-vision"
+                        app:iiv_icon="@string/gmd_insert_emoticon"
                         />
                     <TextView
-                        android:id="@+id/Drawer_hidden_Item"
+                        android:id="@+id/Drawer_JJal_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="16dp"
                         android:paddingBottom="16dp"
-                        android:text="@string/hidden_folder"
+                        android:text="@string/jjal_folder"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
                 </LinearLayout>
 
 
-                <!-- DEFAULT ALBUMS -->
+                <!-- Local ALBUMS -->
 
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -123,7 +123,7 @@
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-folder"
+                            app:iiv_icon="@string/gmd_image"
                             android:layout_marginLeft="@dimen/big_spacing"
                             android:layout_marginRight="@dimen/big_spacing"
                             />
@@ -141,7 +141,7 @@
 
 
 
-                <!-- WALLPAPERS -->
+                <!-- Bookmark -->
                     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_drawer_Wallpapers"
                         android:layout_width="match_parent"
@@ -151,7 +151,7 @@
                         android:clickable="true">
 
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/Drawer_wallpapers_Icon"
+                            android:id="@+id/Drawer_Bookmark_Icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
@@ -160,12 +160,12 @@
                             app:iiv_icon="gmd-bookmark-border" />
 
                         <TextView
-                            android:id="@+id/Drawer_wallpapers_Item"
+                            android:id="@+id/Drawer_Bookmark_Item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingTop="16dp"
                             android:paddingBottom="16dp"
-                            android:text="@string/wallpapers"
+                            android:text="@string/bookmark"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp" />
                     </LinearLayout>

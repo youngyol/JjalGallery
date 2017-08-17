@@ -30,6 +30,10 @@ public class Media implements CursorHandler, Parcelable {
     private String mimeType = "unknown";
     private int orientation = 0;
 
+
+    private boolean isBookmark = false;
+
+
     private String uriString = null;
 
     private long size = -1;
@@ -146,6 +150,15 @@ public class Media implements CursorHandler, Parcelable {
 
     public int getOrientation() {
         return orientation;
+    }
+
+
+    public boolean isBookmark() {
+        return isBookmark;
+    }
+
+    public void setBookmark(boolean bookmark) {
+        isBookmark = bookmark;
     }
 
     //<editor-fold desc="Exif & More">

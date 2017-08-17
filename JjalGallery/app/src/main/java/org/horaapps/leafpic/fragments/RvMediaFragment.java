@@ -78,7 +78,7 @@ public class RvMediaFragment extends BaseFragment {
         setHasOptionsMenu(true);
 
         album = getArguments().getParcelable("album");
-    }
+     }
 
     @Override
     public void onAttach(Context context) {

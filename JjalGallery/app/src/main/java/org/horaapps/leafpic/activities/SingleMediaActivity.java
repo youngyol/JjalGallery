@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.provider.Settings;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -70,7 +72,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private static final String ISLOCKED_ARG = "isLocked";
     public static final String ACTION_OPEN_ALBUM = "org.horaapps.leafpic.intent.VIEW_ALBUM";
     private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
-
+    private boolean isBookmarkChecked = false;
 
     @BindView(R.id.photos_pager)
     HackyViewPager mViewPager;
@@ -87,6 +89,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private ArrayList<Media> media;
     private MediaPagerAdapter adapter;
 
+    private MenuItem menuBookmarkItem;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +114,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         adapter = new MediaPagerAdapter(getSupportFragmentManager(), media);
         initUi();
-    }
+
+     }
 
     private void loadUri(Uri uri) {
         album = new Album(uri.toString(), uri.getPath());
@@ -253,8 +257,27 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         menu.findItem(R.id.action_delete).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_delete));
         menu.findItem(R.id.action_share).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
+        menu.findItem(R.id.action_bookmark).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_heart_outline));
+        menu.findItem(R.id.action_edit).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_crop_rotate));
+        menuBookmarkItem = menu.findItem(R.id.action_bookmark);
 
+        checkBookmarkIcon();
         return true;
+    }
+
+    private Boolean checkBookmarkIcon() {
+
+        Boolean checkBookmark  = media.get(position).isBookmark();
+        Drawable normalDrawable = menuBookmarkItem.getIcon();
+        Drawable wrapDrawable = DrawableCompat.wrap(normalDrawable);
+
+        if(checkBookmark) DrawableCompat.setTint(wrapDrawable, getResources().getColor(R.color.md_deep_orange_800));
+        else  DrawableCompat.setTint(wrapDrawable, getResources().getColor(R.color.md_white_1000));
+//        menuBookmarkItem.setIcon(wrapDrawable);
+
+        return !checkBookmark;
+
+
     }
 
     @Override
@@ -278,7 +301,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         if (customUri) {
             menu.setGroupVisible(R.id.on_internal_storage, false);
             menu.setGroupVisible(R.id.only_photos_options, false);
-         }
+        }
         return super.onPrepareOptionsMenu(menu);
 
     }
@@ -340,8 +363,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
         switch (item.getItemId()) {
 
 
-
-
             case R.id.action_share:
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType(getCurrentMedia().getMimeType());
@@ -357,6 +378,10 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 uCrop.start(SingleMediaActivity.this);
                 break;
 
+            case R.id.action_bookmark: 
+                media.get(position).setBookmark(!media.get(position).isBookmark());
+                checkBookmarkIcon();
+                break;
 
             case R.id.action_delete:
                 final AlertDialog textDialog = AlertDialogsHelper.getTextDialog(SingleMediaActivity.this, R.string.delete, R.string.delete_photo_message);
@@ -533,5 +558,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
         });
         colorAnimation.start();
     }
+
 }
 

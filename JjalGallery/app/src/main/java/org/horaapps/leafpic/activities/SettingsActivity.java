@@ -1,7 +1,5 @@
 package org.horaapps.leafpic.activities;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -9,18 +7,15 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.settings.CardViewStyleSetting;
 import org.horaapps.leafpic.settings.ColorsSetting;
 import org.horaapps.leafpic.settings.GeneralSetting;
 import org.horaapps.leafpic.settings.MapProviderSetting;
 import org.horaapps.leafpic.settings.SinglePhotoSetting;
-import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.views.SettingWithSwitchView;
 
 import butterknife.BindView;
@@ -29,7 +24,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import horaapps.org.liz.ColorPalette;
 import horaapps.org.liz.ThemedActivity;
-import horaapps.org.liz.ViewUtil;
 
 public class SettingsActivity extends ThemedActivity {
     private Toolbar toolbar;
@@ -43,8 +37,7 @@ public class SettingsActivity extends ThemedActivity {
     @BindView(R.id.option_swipe_direction) SettingWithSwitchView optionSwipeDirection;
 
     @BindView(R.id.option_fab) SettingWithSwitchView optionShowFab;
-    @BindView(R.id.option_statusbar) SettingWithSwitchView optionStatusbar;
-    @BindView(R.id.option_colored_navbar) SettingWithSwitchView optionColoredNavbar;
+//     @BindView(R.id.option_colored_navbar) SettingWithSwitchView optionColoredNavbar;
 
     @BindView(R.id.option_sub_scaling) SettingWithSwitchView optionSubScaling;
 
@@ -67,26 +60,20 @@ public class SettingsActivity extends ThemedActivity {
             }
         });
 
-        optionStatusbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateTheme();
-                setStatusBarColor();
-            }
-        });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (ViewUtil.hasNavBar(this)) {
-                optionColoredNavbar.setOnClickListener(new View.OnClickListener() {
-                    @SuppressLint("NewApi")
-                    @Override
-                    public void onClick(View view) {
-                        updateTheme();
-                        getWindow().setNavigationBarColor(isNavigationBarColored() ? getPrimaryColor() : ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
-                    }
-                });
-            } else optionColoredNavbar.setVisibility(View.GONE);
-        }
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            if (ViewUtil.hasNavBar(this)) {
+//                optionColoredNavbar.setOnClickListener(new View.OnClickListener() {
+//                    @SuppressLint("NewApi")
+//                    @Override
+//                    public void onClick(View view) {
+//                        updateTheme();
+//                        getWindow().setNavigationBarColor(isNavigationBarColored() ? getPrimaryColor() : ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+//                    }
+//                });
+//            } else optionColoredNavbar.setVisibility(View.GONE);
+//        }
         ScrollView scrollView = ButterKnife.findById(this, R.id.settingAct_scrollView);
         setScrollViewColor(scrollView);
     }
@@ -122,23 +109,11 @@ public class SettingsActivity extends ThemedActivity {
     public void onChangeThemeClicked(View view) {
         new ColorsSetting(SettingsActivity.this).chooseBaseTheme();
     }
-
-    @OnClick(R.id.ll_card_view_style)
-    public void onChangeCardViewStyleClicked(View view) {
-        new CardViewStyleSetting(SettingsActivity.this).show();
-    }
-
-    @OnClick(R.id.ll_security)
-    public void onSecurityClicked(View view) {
-        if (Security.isPasswordSet(getApplicationContext())) {
-            Security.askPassword(SettingsActivity.this, new Security.PasswordInterface() {
-                @Override
-                public void onSuccess() {startActivity(new Intent(getApplicationContext(), SecurityActivity.class));}
-                @Override
-                public void onError() {Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();}
-            });
-        } else startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
-    }
+//
+//    @OnClick(R.id.ll_card_view_style)
+//    public void onChangeCardViewStyleClicked(View view) {
+//        new CardViewStyleSetting(SettingsActivity.this).show();
+//    }
 
     @OnClick(R.id.ll_primaryColor)
     public void onChangePrimaryColorClicked(View view) {

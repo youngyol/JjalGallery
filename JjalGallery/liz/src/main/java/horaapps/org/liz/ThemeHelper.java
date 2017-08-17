@@ -57,9 +57,9 @@ public class ThemeHelper {
 
 	public void updateTheme(){
 		this.primaryColor = Hawk.get(context.getString(R.string.preference_primary_color),
-				getColor(R.color.md_indigo_500));
+				getColor(R.color.md_teal_A700));
 		this.accentColor = Hawk.get(context.getString(R.string.preference_accent_color),
-				getColor(R.color.md_light_blue_500));
+				getColor(R.color.md_pink_300));
 		baseTheme = Theme.fromValue(Hawk.get(context.getString(R.string.preference_base_theme), 1));
 	}
 
@@ -80,7 +80,7 @@ public class ThemeHelper {
 
 	public static int getPrimaryColor(Context context) {
 		return Hawk.get(context.getString(R.string.preference_primary_color),
-				ContextCompat.getColor(context, R.color.md_indigo_500));
+				ContextCompat.getColor(context, R.color.md_teal_A700));
 	}
 
 
@@ -88,7 +88,7 @@ public class ThemeHelper {
 
 	public static int getAccentColor(Context context) {
 		return Hawk.get(context.getString(R.string.preference_accent_color),
-				ContextCompat.getColor(context, R.color.md_light_blue_500));
+				ContextCompat.getColor(context, R.color.md_pink_300));
 	}
 
 	public static Theme getBaseTheme(Context context) {

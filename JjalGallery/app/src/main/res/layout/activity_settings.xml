@@ -173,29 +173,7 @@
                         app:settingPreferenceKey="@string/preference_custom_icon_color"
                         app:settingTitle="@string/custom_icon_color"/>
 
-                    <!-- TRANSLUCENT STATUS BAR-->
-                    <org.horaapps.leafpic.views.SettingWithSwitchView
-                        android:id="@+id/option_statusbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:settingCaption="@string/traslucent_statusbar_sub"
-                        app:settingDefaultValue="true"
-                        app:settingIcon="gmd-web-asset"
-                        app:settingMinApi="21"
-                        app:settingPreferenceKey="@string/preference_translucent_status_bar"
-                        app:settingTitle="@string/traslucent_statusbar"/>
 
-                    <!--COLORED NAV BAR-->
-                    <org.horaapps.leafpic.views.SettingWithSwitchView
-                        android:id="@+id/option_colored_navbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:settingCaption="@string/colored_navbar_sub"
-                        app:settingDefaultValue="false"
-                        app:settingIcon="gmd-video-label"
-                        app:settingMinApi="21"
-                        app:settingPreferenceKey="@string/preference_colored_nav_bar"
-                        app:settingTitle="@string/colored_navbar"/>
                 </LinearLayout>
             </org.horaapps.leafpic.views.themeable.ThemedCardView>
 

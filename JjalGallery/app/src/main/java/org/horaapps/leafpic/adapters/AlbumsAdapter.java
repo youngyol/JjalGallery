@@ -1,6 +1,7 @@
 package org.horaapps.leafpic.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -12,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.orhanobut.hawk.Hawk;
@@ -200,9 +200,9 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
         View v;
         switch (cvs) {
             default:
-            case MATERIAL: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_material, parent, false); break;
+//            case MATERIAL: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_material, parent, false); break;
             case FLAT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_flat, parent, false); break;
-            case COMPACT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_compact, parent, false); break;
+//            case COMPACT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_compact, parent, false); break;
         }
         return new ViewHolder(v);
     }
@@ -233,12 +233,13 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
 
         RequestOptions options = new RequestOptions()
                 .signature(f.getSignature())
-                .format(DecodeFormat.PREFER_ARGB_8888)
+//                .format(DecodeFormat.PREFER_ARGB_8888)
                 .centerCrop()
                 .placeholder(placeholder)
                 .error(org.horaapps.leafpic.R.drawable.ic_error)
                 //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+
 
         Glide.with(holder.picture.getContext())
                 .load(f.getPath())
@@ -251,7 +252,7 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
         if (accentColor == getThemeHelper().getPrimaryColor())
             accentColor = ColorPalette.getDarkerColor(accentColor);
 
-        int textColor = getThemeHelper().getColor(getThemeHelper().getBaseTheme().equals(Theme.LIGHT) ? R.color.md_album_color_2 : R.color.md_album_color);
+        int textColor = getThemeHelper().getColor(getThemeHelper().getBaseTheme().equals(Theme.LIGHT) ? R.color.md_album_color : R.color.md_album_color);
 
         if (a.isSelected())
             textColor = getThemeHelper().getColor(R.color.md_album_color);
@@ -347,11 +348,8 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
                 picture.clearColorFilter();
                 selectedIcon.setVisibility(View.GONE);
                 switch (cvs) {
-                    default: case MATERIAL:
-                        footer.setBackgroundColor(theme.getCardBackgroundColor());
-                        break;
-                    case FLAT: case COMPACT:
-                        footer.setBackgroundColor(ColorPalette.getTransparentColor(theme.getBackgroundColor(), 150));
+                    default: case FLAT:
+                        footer.setBackgroundColor(ColorPalette.getTransparentColor(Color.parseColor("#7E827A"),125));
                         break;
                 }
             }

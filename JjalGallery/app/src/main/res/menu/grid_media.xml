@@ -89,8 +89,8 @@
         android:title="@string/select_all"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/settings"
-        android:title="@string/settings"
-        app:showAsAction="never" />
+    <!--<item-->
+        <!--android:id="@+id/settings"-->
+        <!--android:title="@string/settings"-->
+        <!--app:showAsAction="never" />-->
 </menu>

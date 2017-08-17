@@ -129,17 +129,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="org.horaapps.leafpic.activities.SecurityActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:label="@string/security">
-            <intent-filter>
-                <action android:name="android.intent.action.SECURITY" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

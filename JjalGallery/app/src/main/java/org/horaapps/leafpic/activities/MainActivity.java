@@ -372,10 +372,10 @@ public class MainActivity extends SharedMediaActivity {
 
 
         switch (item.getItemId()) {
-
-            case R.id.settings:
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                return true;
+//
+//            case R.id.settings:
+//                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+//                return true;
 
 
             //region Affix

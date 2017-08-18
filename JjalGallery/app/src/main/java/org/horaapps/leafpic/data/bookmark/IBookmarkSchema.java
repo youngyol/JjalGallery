@@ -12,9 +12,9 @@ public interface IBookmarkSchema {
             + BOOKMARK_TABLE
             + " ("
             + COLUMN_ID
-            + " INTEGER PRIMARY KEY, "
+            + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_BOOKMARK_PATH
-            + " TEXT NOT NULL, "
+            + " TEXT NOT NULL"
             + ")";
 
     String[] BOOKMARK_COLUMNS = new String[] { COLUMN_ID,

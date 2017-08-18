@@ -16,6 +16,8 @@ public abstract class DbContentProvider {
         return mDb.delete(tableName, selection, selectionArgs);
     }
 
+
+
     public long insert(String tableName, ContentValues values) {
         return mDb.insert(tableName, null, values);
     }

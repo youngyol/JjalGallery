@@ -46,6 +46,8 @@ import org.horaapps.leafpic.data.AlbumSettings;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.MediaHelper;
 import org.horaapps.leafpic.data.StorageHelper;
+import org.horaapps.leafpic.data.bookmark.Bookmark;
+import org.horaapps.leafpic.data.bookmark.BookmarkDB;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
@@ -69,10 +71,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
     private static final String TAG = SingleMediaActivity.class.getSimpleName();
 
+
     private static final String ISLOCKED_ARG = "isLocked";
     public static final String ACTION_OPEN_ALBUM = "org.horaapps.leafpic.intent.VIEW_ALBUM";
     private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
     private boolean isBookmarkChecked = false;
+
 
     @BindView(R.id.photos_pager)
     HackyViewPager mViewPager;
@@ -95,8 +99,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_media);
-
         ButterKnife.bind(this);
+
 
         String action = getIntent().getAction();
 
@@ -115,24 +119,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
         adapter = new MediaPagerAdapter(getSupportFragmentManager(), media);
         initUi();
 
-     }
+    }
 
     private void loadUri(Uri uri) {
         album = new Album(uri.toString(), uri.getPath());
         album.settings = AlbumSettings.getDefaults();
 
-        /*
-        String path = StorageHelper.getMediaPath(getApplicationContext(), getIntent().getData());
-                Album album = null;
-
-                if (path != null) {
-                    album = ContentProviderHelper.getAlbumFromMedia(getApplicationContext(), path);
-                    if (album != null) {
-                        //album.updatePhotos(getApplicationContext());
-                        album.setCurrentMedia(path);
-                    }
-                }
-        */
 
         try {
             InputStream inputStream = getContentResolver().openInputStream(uri);
@@ -256,26 +248,27 @@ public class SingleMediaActivity extends SharedMediaActivity {
         getMenuInflater().inflate(R.menu.menu_view_pager, menu);
 
         menu.findItem(R.id.action_delete).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_delete));
-        menu.findItem(R.id.action_share).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
+        menu.findItem(R.id.action_share).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_share));
         menu.findItem(R.id.action_bookmark).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_heart_outline));
         menu.findItem(R.id.action_edit).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_crop_rotate));
         menuBookmarkItem = menu.findItem(R.id.action_bookmark);
 
-        checkBookmarkIcon();
+        isBookmarkChecked =checkDBForBookmark(media.get(position).getPath());
+        setBookmarkIconColor();
         return true;
     }
 
-    private Boolean checkBookmarkIcon() {
+    private void setBookmarkIconColor() {
 
-        Boolean checkBookmark  = media.get(position).isBookmark();
         Drawable normalDrawable = menuBookmarkItem.getIcon();
         Drawable wrapDrawable = DrawableCompat.wrap(normalDrawable);
-
-        if(checkBookmark) DrawableCompat.setTint(wrapDrawable, getResources().getColor(R.color.md_deep_orange_800));
-        else  DrawableCompat.setTint(wrapDrawable, getResources().getColor(R.color.md_white_1000));
-//        menuBookmarkItem.setIcon(wrapDrawable);
-
-        return !checkBookmark;
+        if (isBookmarkChecked) {
+            //북마크 테이블 이미 벌써 존재
+            DrawableCompat.setTint(wrapDrawable, getResources().getColor(R.color.md_deep_orange_800));
+         } else {
+            //없어
+            DrawableCompat.setTint(wrapDrawable, getResources().getColor(R.color.md_white_1000));
+         }
 
 
     }
@@ -380,7 +373,24 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_bookmark:
                 media.get(position).setBookmark(!media.get(position).isBookmark());
-                checkBookmarkIcon();
+                Bookmark tmp = new Bookmark();
+                tmp.path = media.get(position).getPath();
+                if(!isBookmarkChecked) {
+                    isBookmarkChecked = true;
+                    if(BookmarkDB.mBookmarkDao.addBookmark(tmp)) {
+                        Toast.makeText(getApplicationContext(),"insert  "+isBookmarkChecked,Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+
+                   long removedID = BookmarkDB.mBookmarkDao.getBookmarkIDByPath(tmp.path);
+                    Boolean tmp1 = BookmarkDB.mBookmarkDao.deleteData(removedID);
+                    isBookmarkChecked = false;
+                 }
+
+                 setBookmarkIconColor();
+
+
                 break;
 
             case R.id.action_delete:
@@ -421,10 +431,13 @@ public class SingleMediaActivity extends SharedMediaActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private Boolean checkDBForBookmark(String path) {
+        return BookmarkDB.mBookmarkDao.fetchBookmarkByPath(path);
+    }
+
     public Media getCurrentMedia() {
         return media.get(position);
     }
-
 
     private void updateBrightness(float level) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -473,7 +486,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));
         }
     }
-
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         if (mViewPager != null) {

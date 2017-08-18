@@ -39,6 +39,50 @@ public class BookmarkDao extends DbContentProvider
         return bookmark;
     }
 
+
+
+    public int delete(String path ) {
+
+
+        return mDb.delete(IBookmarkSchema.BOOKMARK_TABLE, IBookmarkSchema.COLUMN_BOOKMARK_PATH + " = "+path, null);
+    }
+
+    public Boolean fetchBookmarkByPath(String path) {
+        final String selectionArgs[] = { path };
+        final String selection = "path" + " = ?";
+         cursor = super.query(BOOKMARK_TABLE, BOOKMARK_COLUMNS, selection,
+                selectionArgs, COLUMN_ID);
+        if (cursor != null  && (cursor.getCount() > 0) ) {
+            cursor.close();
+            return true;
+        }
+        return false;
+    }
+
+
+
+    public long getBookmarkIDByPath(String path) {
+        final String selectionArgs[] = { path };
+        final String selection = "path" + " = ?";
+        cursor = super.query(BOOKMARK_TABLE, BOOKMARK_COLUMNS, selection,
+                selectionArgs, COLUMN_ID);
+
+        Bookmark tmp = new Bookmark();
+        if (cursor != null  && (cursor.getCount() > 0) ) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    tmp = cursorToEntity(cursor);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+
+//            return true;
+        }
+//        return false;
+        return tmp.id;
+    }
+
+
     public List<Bookmark> fetchAllBookmarks() {
         List<Bookmark> bookList = new ArrayList<Bookmark>();
         cursor = super.query(BOOKMARK_TABLE, BOOKMARK_COLUMNS, null,
@@ -67,6 +111,7 @@ public class BookmarkDao extends DbContentProvider
             return false;
         }
     }
+
 
     @Override
     public boolean addBookmarks(List<Bookmark> bookmarks) {
@@ -103,9 +148,14 @@ public class BookmarkDao extends DbContentProvider
 
     private void setContentValue(Bookmark bookmark) {
         initialValues = new ContentValues();
-        initialValues.put(COLUMN_ID, bookmark.id);
         initialValues.put(COLUMN_BOOKMARK_PATH, bookmark.path);
     }
+
+
+    public boolean deleteData(long rowId) {
+        return mDb.delete(IBookmarkSchema.BOOKMARK_TABLE, IBookmarkSchema.COLUMN_ID + "=" + rowId, null) > 0;
+    }
+
 
     private ContentValues getContentValue() {
         return initialValues;

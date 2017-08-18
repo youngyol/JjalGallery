@@ -31,7 +31,7 @@ import horaapps.org.liz.ThemedAlertDialogBuilder;
  * Created by dnld on 6/29/17.
  */
 
-public class DeleteAlbumsDialog extends DialogFragment {
+public class    DeleteAlbumsDialog extends DialogFragment {
 
     ThemeHelper t;
     TextView dialogTitle;

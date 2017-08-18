@@ -15,7 +15,7 @@ public class BookmarkDB {
     private static final String DATABASE_NAME = "bookmark_database.db";
     private DatabaseHelper mDbHelper;
     // Increment DB Version on any schema change
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private final Context mContext;
     public static BookmarkDao mBookmarkDao;
 
@@ -24,9 +24,7 @@ public class BookmarkDB {
     public BookmarkDB open() throws SQLException {
         mDbHelper = new DatabaseHelper(mContext);
         SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
-
         mBookmarkDao = new BookmarkDao(mDb);
-
         return this;
     }
 

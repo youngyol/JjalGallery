@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "900002759216",
+    "firebase_url": "https://jjaldb-c2f6c.firebaseio.com",
+    "project_id": "jjaldb-c2f6c",
+    "storage_bucket": "jjaldb-c2f6c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900002759216:android:bec9c53c859a2195",
+        "android_client_info": {
+          "package_name": "org.horaapps.leafpic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900002759216-u7ei076e0jf590iklji1tsr5fieq9kb5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmmuCnlgb7-uXOwYvlrd1NemM7r7uFc_8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900002759216:android:2e9af98312257190",
+        "android_client_info": {
+          "package_name": "org.horaapps.leafpic.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900002759216-bgf9f4eg45edjc2as2dlmb6i7o34r62v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.horaapps.leafpic.debug",
+            "certificate_hash": "0336d167b204d5583700921c59f637a84967041e"
+          }
+        },
+        {
+          "client_id": "900002759216-u7ei076e0jf590iklji1tsr5fieq9kb5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmmuCnlgb7-uXOwYvlrd1NemM7r7uFc_8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900002759216-u7ei076e0jf590iklji1tsr5fieq9kb5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

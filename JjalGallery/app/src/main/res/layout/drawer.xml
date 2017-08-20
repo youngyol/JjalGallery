@@ -76,7 +76,7 @@
                 <!-- JJAL ALBUMS -->
                 <LinearLayout
                     xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_hidden"
+                    android:id="@+id/ll_drawer_jjal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -143,7 +143,7 @@
 
                 <!-- Bookmark -->
                     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_drawer_Wallpapers"
+                        android:id="@+id/ll_drawer_Bookmarks"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"

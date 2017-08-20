@@ -23,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -40,9 +39,10 @@ import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.StorageHelper;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
 import org.horaapps.leafpic.fragments.BaseFragment;
+import org.horaapps.leafpic.fragments.BookmarkFragment;
+import org.horaapps.leafpic.fragments.JjalsFragment;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
-import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.util.Locale;
@@ -58,10 +58,14 @@ public class MainActivity extends SharedMediaActivity {
 
     AlbumsFragment albumsFragment = new AlbumsFragment();
 
-    @BindView(R.id.fab_camera) FloatingActionButton fab;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.coordinator_main_layout) CoordinatorLayout mainLayout;
+    @BindView(R.id.fab_camera)
+    FloatingActionButton fab;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.coordinator_main_layout)
+    CoordinatorLayout mainLayout;
 
     private boolean pickMode = false;
     private boolean albumsMode = true;
@@ -146,7 +150,7 @@ public class MainActivity extends SharedMediaActivity {
     }
 
     @Deprecated
-    private boolean displayData(Intent data){
+    private boolean displayData(Intent data) {
 
         // TODO: 3/25/17 pick porcodio
         pickMode = data.getBooleanExtra(SplashScreen.PICK_MODE, false);
@@ -174,8 +178,11 @@ public class MainActivity extends SharedMediaActivity {
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar,
                 R.string.drawer_open, R.string.drawer_close) {
-            public void onDrawerClosed(View view) { }
-            public void onDrawerOpened(View drawerView) { }
+            public void onDrawerClosed(View view) {
+            }
+
+            public void onDrawerOpened(View drawerView) {
+            }
         };
 
 
@@ -183,65 +190,47 @@ public class MainActivity extends SharedMediaActivity {
         drawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-
-//        findViewById(R.id.ll_drawer_Donate).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this, DonateActivity.class));
-//            }
-//        });
-
-//        findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-//            }
-//        });
-
-//        findViewById(R.id.ll_drawer_About).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this, AboutActivity.class));
-//            }
-//        });
-
         findViewById(R.id.ll_drawer_Default).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                initUi();
                 drawer.closeDrawer(GravityCompat.START);
-                displayAlbums(false);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content, albumsFragment, "albums")
+                        .commit();
+
+
             }
         });
 
-        findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ll_drawer_jjal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                drawer.closeDrawer(GravityCompat.START);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content, new JjalsFragment(), "albums")
+                        .commit();
+//                Intent intent = new Intent(MainActivity.this, JjalActivity.class);
+//                 startActivity(intent);
 
                 // TODO: 3/25/17 redo
-                if (Security.isPasswordOnHidden(getApplicationContext())){
-                    Security.askPassword(MainActivity.this, new Security.PasswordInterface() {
-                        @Override
-                        public void onSuccess() {
-                            drawer.closeDrawer(GravityCompat.START);
-                            displayAlbums(true);
-                        }
-
-                        @Override
-                        public void onError() {
-                            Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    drawer.closeDrawer(GravityCompat.START);
-                    displayAlbums(true);
-                }
             }
         });
 
-        findViewById(R.id.ll_drawer_Wallpapers).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ll_drawer_Bookmarks).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
+
+                drawer.closeDrawer(GravityCompat.START);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content, new BookmarkFragment(), "albums")
+                        .commit();
             }
         });
 
@@ -382,7 +371,6 @@ public class MainActivity extends SharedMediaActivity {
             // TODO: 11/21/16 move away from here
 
 
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -402,7 +390,7 @@ public class MainActivity extends SharedMediaActivity {
             }
         } else {
             if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag("media")).onBackPressed())
-               goBackToAlbums();
+                goBackToAlbums();
         }
     }
 }

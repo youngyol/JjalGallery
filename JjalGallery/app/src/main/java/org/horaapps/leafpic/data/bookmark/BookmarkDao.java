@@ -83,10 +83,10 @@ public class BookmarkDao extends DbContentProvider
     }
 
 
-    public List<Bookmark> fetchAllBookmarks() {
-        List<Bookmark> bookList = new ArrayList<Bookmark>();
+    public ArrayList<Bookmark> fetchAllBookmarks() {
+        ArrayList<Bookmark> bookList = new ArrayList<Bookmark>();
         cursor = super.query(BOOKMARK_TABLE, BOOKMARK_COLUMNS, null,
-                null, COLUMN_ID);
+                null, COLUMN_ID+" desc");
 
         if (cursor != null) {
             cursor.moveToFirst();

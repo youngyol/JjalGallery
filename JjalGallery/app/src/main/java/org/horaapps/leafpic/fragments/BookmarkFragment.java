@@ -1,5 +1,7 @@
 package org.horaapps.leafpic.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,10 +14,12 @@ import android.view.animation.OvershootInterpolator;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
+import org.horaapps.leafpic.activities.SingleImageActivity;
 import org.horaapps.leafpic.adapters.BookmarksAdapter;
 import org.horaapps.leafpic.data.bookmark.Bookmark;
 import org.horaapps.leafpic.data.bookmark.BookmarkDB;
 import org.horaapps.leafpic.util.Measure;
+import org.horaapps.leafpic.util.RecyclerItemClickListener;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
@@ -29,7 +33,7 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
  * Created by nasos on 2017-08-20.
  */
 
-public class BookmarkFragment  extends BaseFragment {
+public class BookmarkFragment extends BaseFragment {
     private static final String TAG = "asd";
     @BindView(R.id.bookmark_album)
     RecyclerView rv;
@@ -39,6 +43,7 @@ public class BookmarkFragment  extends BaseFragment {
 
 
     private GridSpacingItemDecoration spacingDecoration;
+    private Context ctx;
     private BookmarksAdapter adapter;
     private ArrayList<Bookmark> bookmarkItemDatas;
 
@@ -46,7 +51,7 @@ public class BookmarkFragment  extends BaseFragment {
 
     @Override
     public boolean editMode() {
-        return  false;
+        return false;
     }
 
     @Override
@@ -63,19 +68,49 @@ public class BookmarkFragment  extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this,view);
-        int spanCount = 2;
-        spacingDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
-        rv.setHasFixedSize(true);
-        rv.addItemDecoration(spacingDecoration);
-        rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
-        rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
-        bookmarkItemDatas = getBookmarks();
+        ButterKnife.bind(this, view);
+        ctx = getContext();
+            int spanCount = 2;
+            spacingDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
+            rv.setHasFixedSize(true);
+            rv.addItemDecoration(spacingDecoration);
+            rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+            rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
+            bookmarkItemDatas = getBookmarks();
 
 
-        refresh.setOnRefreshListener(this::display);
-        adapter = new BookmarksAdapter(getContext(),bookmarkItemDatas);
-        rv.setAdapter(adapter);
+            refresh.setOnRefreshListener(this::display);
+            adapter = new BookmarksAdapter(getContext(), bookmarkItemDatas);
+
+            rv.setAdapter(adapter);
+
+            setListener();
+
+    }
+
+    private void setListener() {
+
+
+        rv.addOnItemTouchListener(
+                new RecyclerItemClickListener(rv, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        String tmppath = bookmarkItemDatas.get(position).path;
+
+
+                        Intent intent = new Intent(getActivity(), SingleImageActivity.class);
+                        intent.putExtra("bookmarkImg", bookmarkItemDatas);
+                        intent.putExtra("position", position);
+                        getActivity().startActivity(intent);
+
+
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                    }
+                }));
+
     }
 
 
@@ -83,15 +118,12 @@ public class BookmarkFragment  extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_bookmark, null);
-        ButterKnife.bind(this, v);
-
+        View v= inflater.inflate(R.layout.fragment_bookmark, null);
+            ButterKnife.bind(this, v);
 
 //        Toast.makeText(getActivity(),bookmarkItemDatas.size(),Toast.LENGTH_SHORT).show();
         return v;
     }
-
-
 
 
     public void refreshTheme(ThemeHelper t) {
@@ -103,15 +135,15 @@ public class BookmarkFragment  extends BaseFragment {
     }
 
     public ArrayList<Bookmark> getBookmarks() {
-        ArrayList<Bookmark> bookmarks =  new ArrayList<Bookmark>();
+        ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
         return BookmarkDB.mBookmarkDao.fetchAllBookmarks();
     }
 
     private void display() {
 
         adapter.clear();
-        bookmarkItemDatas=BookmarkDB.mBookmarkDao.fetchAllBookmarks();
-        adapter = new BookmarksAdapter(getContext(),bookmarkItemDatas);
+        bookmarkItemDatas = BookmarkDB.mBookmarkDao.fetchAllBookmarks();
+        adapter = new BookmarksAdapter(getContext(), bookmarkItemDatas);
         rv.setAdapter(adapter);
 
         refresh.setRefreshing(false);

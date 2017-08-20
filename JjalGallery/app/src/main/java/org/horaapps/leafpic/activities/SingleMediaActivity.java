@@ -360,6 +360,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType(getCurrentMedia().getMimeType());
                 share.putExtra(Intent.EXTRA_STREAM, getCurrentMedia().getUri());
+
+                Toast.makeText(getApplicationContext(),getCurrentMedia().getMimeType()+"    "+getCurrentMedia().getUri()+" ",Toast.LENGTH_SHORT).show();
                 startActivity(Intent.createChooser(share, getString(R.string.send_to)));
                 return true;
 
@@ -495,11 +497,15 @@ public class SingleMediaActivity extends SharedMediaActivity {
     }
 
     public void toggleSystemUI() {
-        if (fullScreenMode)
+        if ( getScreenMode())
             showSystemUI();
         else hideSystemUI();
     }
 
+    public boolean getScreenMode(){
+
+        return  fullScreenMode;
+    }
     private void hideSystemUI() {
         runOnUiThread(new Runnable() {
             public void run() {

@@ -37,9 +37,11 @@ import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.StorageHelper;
+import org.horaapps.leafpic.data.bookmark.BookmarkDB;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
 import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.BookmarkFragment;
+import org.horaapps.leafpic.fragments.EmptyFragment;
 import org.horaapps.leafpic.fragments.JjalsFragment;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
@@ -226,11 +228,22 @@ public class MainActivity extends SharedMediaActivity {
             @Override
             public void onClick(View v) {
 
-                drawer.closeDrawer(GravityCompat.START);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content, new BookmarkFragment(), "albums")
-                        .commit();
+
+                if (BookmarkDB.mBookmarkDao.hasBookmark()) {
+                    drawer.closeDrawer(GravityCompat.START);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content, new BookmarkFragment(), "albums")
+                            .commit();
+                } else {
+
+                    drawer.closeDrawer(GravityCompat.START);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content, new EmptyFragment(),"albums")
+                            .commit();
+
+                }
             }
         });
 

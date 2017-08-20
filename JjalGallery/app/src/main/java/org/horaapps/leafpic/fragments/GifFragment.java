@@ -17,8 +17,8 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
-import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.bookmark.Bookmark;
 
 import java.io.File;
 
@@ -33,6 +33,7 @@ public class GifFragment extends Fragment {
     private int deviceWidth;
     private int deviceHeight ;
 
+    private String bookmarkImgPath;
 
     private void calculate() {
         DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -52,10 +53,24 @@ public class GifFragment extends Fragment {
 
     }
 
+
+    public static GifFragment newInstance(Bookmark media) {
+        GifFragment imageFragment = new GifFragment();
+        Bundle args = new Bundle();
+        args.putString("bookmark", media.path);
+        imageFragment.setArguments(args);
+        return imageFragment;
+    }
+
+
+
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         calculate();
         gif = getArguments().getParcelable("gif");
+        bookmarkImgPath = getArguments().getString("bookmark"," ");
+
     }
 
 
@@ -69,11 +84,22 @@ public class GifFragment extends Fragment {
 
         PhotoDraweeView img = new PhotoDraweeView(container.getContext());
 
-        File imgFile = new File(gif.getPath());
+        File imgFile;
+        if(bookmarkImgPath.equals(" ")) {
+            imgFile= new File(gif.getPath());
 
+
+        }
+        else{
+
+            imgFile = new File(bookmarkImgPath);
+
+
+        }
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.fromFile(imgFile))
                 .setResizeOptions(new ResizeOptions(deviceWidth, 100))
                 .build();
+
         PipelineDraweeControllerBuilder controller1 = Fresco.newDraweeControllerBuilder();
         controller1.setImageRequest(request);
         controller1.setOldController(img.getController());
@@ -88,17 +114,12 @@ public class GifFragment extends Fragment {
                 img.update(imageInfo.getWidth(), imageInfo.getHeight());
             }
         });
-//        img.setController(controller1.build());
-//        DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                .setImageRequest(request)
-//                .setAutoPlayAnimations(true)
-//                .build();
-//        img.setController(controller);
+
 
         img.setController(controller1.build());
 
 
-        img.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
+//        img.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
          return img;
     }
 }

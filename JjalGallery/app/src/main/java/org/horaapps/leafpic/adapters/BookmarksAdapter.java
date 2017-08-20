@@ -28,6 +28,8 @@ import butterknife.ButterKnife;
 import horaapps.org.liz.ThemeHelper;
 import horaapps.org.liz.ThemedAdapter;
 import horaapps.org.liz.ThemedViewHolder;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * Created by nasos on 2017-08-20.
@@ -35,6 +37,7 @@ import horaapps.org.liz.ThemedViewHolder;
 
 public class BookmarksAdapter extends ThemedAdapter<BookmarksAdapter.ViewHolder> {
     private ArrayList<Bookmark> bookmarks;
+    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
 
     private Drawable placeholder;
 
@@ -84,6 +87,11 @@ public class BookmarksAdapter extends ThemedAdapter<BookmarksAdapter.ViewHolder>
             notifyDataSetChanged();
         }
     }
+
+    public Observable<Integer> getClicks() {
+        return onClickSubject;
+    }
+
 
     @Override
     public int getItemCount() {

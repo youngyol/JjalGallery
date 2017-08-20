@@ -55,7 +55,7 @@ public class ImageFragment extends Fragment {
 
 
     private int deviceWidth;
-    private int deviceHeight ;
+    private int deviceHeight;
 
     public static ImageFragment newInstance(Media media) {
         ImageFragment imageFragment = new ImageFragment();
@@ -64,6 +64,8 @@ public class ImageFragment extends Fragment {
         imageFragment.setArguments(args);
         return imageFragment;
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,7 +107,6 @@ public class ImageFragment extends Fragment {
     }
 
 
-
     private void calculate() {
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -134,16 +135,13 @@ public class ImageFragment extends Fragment {
                 .animate(R.anim.fade_in)*/
 
 
-
-
         RequestOptions options = new RequestOptions()
                 .signature(img.getSignature())
                 //.centerCrop()
-                .override(deviceWidth,500)
+                .override(deviceWidth, 500)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .format(DecodeFormat.PREFER_ARGB_8888)
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
-
 
         Glide.with(getContext())
                 .load(img.getUri())
@@ -162,6 +160,39 @@ public class ImageFragment extends Fragment {
                     }
                 })
                 .into(photoView);
+
+//        if (img != null) {
+//
+//
+//        }
+//        else if( bookmarkImgPath != null){
+//
+//            RequestOptions options = new RequestOptions()
+//                    //.centerCrop()
+//                    .override(deviceWidth, 500)
+//                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+//                    .format(DecodeFormat.PREFER_ARGB_8888)
+//                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+//
+//            Glide.with(getContext())
+//                    .load(bookmarkImgPath)
+//                    .apply(options)
+//                    .listener(new RequestListener<Drawable>() {
+//                        @Override
+//                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+//
+//                            return false;
+//                        }
+//
+//                        @Override
+//                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+//                            //addZoomableView();
+//                            return false;
+//                        }
+//                    })
+//                    .into(photoView);
+//
+//        }
 
     }
 

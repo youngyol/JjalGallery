@@ -18,11 +18,13 @@ public class BookmarkDao extends DbContentProvider
 
     private Cursor cursor;
     private ContentValues initialValues;
+
     public BookmarkDao(SQLiteDatabase db) {
         super(db);
     }
+
     public Bookmark fetchBookmarkById(int id) {
-        final String selectionArgs[] = { String.valueOf(id) };
+        final String selectionArgs[] = {String.valueOf(id)};
         final String selection = "_id" + " = ?";
         Bookmark bookmark = new Bookmark();
         cursor = super.query(BOOKMARK_TABLE, BOOKMARK_COLUMNS, selection,
@@ -40,19 +42,18 @@ public class BookmarkDao extends DbContentProvider
     }
 
 
+    public int delete(String path) {
 
-    public int delete(String path ) {
 
-
-        return mDb.delete(IBookmarkSchema.BOOKMARK_TABLE, IBookmarkSchema.COLUMN_BOOKMARK_PATH + " = "+path, null);
+        return mDb.delete(IBookmarkSchema.BOOKMARK_TABLE, IBookmarkSchema.COLUMN_BOOKMARK_PATH + " = " + path, null);
     }
 
     public Boolean fetchBookmarkByPath(String path) {
-        final String selectionArgs[] = { path };
+        final String selectionArgs[] = {path};
         final String selection = "path" + " = ?";
-         cursor = super.query(BOOKMARK_TABLE, BOOKMARK_COLUMNS, selection,
+        cursor = super.query(BOOKMARK_TABLE, BOOKMARK_COLUMNS, selection,
                 selectionArgs, COLUMN_ID);
-        if (cursor != null  && (cursor.getCount() > 0) ) {
+        if (cursor != null && (cursor.getCount() > 0)) {
             cursor.close();
             return true;
         }
@@ -60,21 +61,20 @@ public class BookmarkDao extends DbContentProvider
     }
 
 
-
     public long getBookmarkIDByPath(String path) {
-        final String selectionArgs[] = { path };
+        final String selectionArgs[] = {path};
         final String selection = "path" + " = ?";
         cursor = super.query(BOOKMARK_TABLE, BOOKMARK_COLUMNS, selection,
                 selectionArgs, COLUMN_ID);
 
         Bookmark tmp = new Bookmark();
-        if (cursor != null  && (cursor.getCount() > 0) ) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    tmp = cursorToEntity(cursor);
-                    cursor.moveToNext();
-                }
-                cursor.close();
+        if (cursor != null && (cursor.getCount() > 0)) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                tmp = cursorToEntity(cursor);
+                cursor.moveToNext();
+            }
+            cursor.close();
 
 //            return true;
         }
@@ -86,7 +86,7 @@ public class BookmarkDao extends DbContentProvider
     public ArrayList<Bookmark> fetchAllBookmarks() {
         ArrayList<Bookmark> bookList = new ArrayList<Bookmark>();
         cursor = super.query(BOOKMARK_TABLE, BOOKMARK_COLUMNS, null,
-                null, COLUMN_ID+" desc");
+                null, COLUMN_ID + " desc");
 
         if (cursor != null) {
             cursor.moveToFirst();
@@ -101,12 +101,23 @@ public class BookmarkDao extends DbContentProvider
         return bookList;
     }
 
+
+    public boolean hasBookmark() {
+        cursor = super.query(BOOKMARK_TABLE, BOOKMARK_COLUMNS, null,
+                null, COLUMN_ID + " desc");
+
+        if (cursor != null && (cursor.getCount() > 0))
+            return true;
+        else
+            return false;
+    }
+
     public boolean addBookmark(Bookmark bookmark) {
         // set values
         setContentValue(bookmark);
         try {
             return super.insert(BOOKMARK_TABLE, getContentValue()) > 0;
-        } catch (SQLiteConstraintException ex){
+        } catch (SQLiteConstraintException ex) {
             Log.w("Database", ex.getMessage());
             return false;
         }

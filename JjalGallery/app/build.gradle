@@ -128,7 +128,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-auth:11.0.2'
     implementation 'com.google.firebase:firebase-database:11.0.2' // 파이어베이스 데이터 베이스 라이브러리 디펜던시 추가
- }
+}
 
 Properties props = new Properties()
 def propFile = new File('signing.properties')

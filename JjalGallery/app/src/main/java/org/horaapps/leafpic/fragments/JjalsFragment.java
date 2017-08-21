@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.adapters.JjalAdapter;
@@ -46,6 +47,7 @@ public class JjalsFragment extends BaseFragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildEventListener;
+    private ValueEventListener mValueEventListener;
     private String tmp;
 
     private static final String TAG = "asd";
@@ -115,35 +117,27 @@ public class JjalsFragment extends BaseFragment {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference("Animal");
 
-        mChildEventListener = new ChildEventListener() {
+        mValueEventListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Jjal jjal = dataSnapshot.getValue(Jjal.class);
-                Log.d("1dad11a", jjal.getUrl());
-                jjalItemDatas.add(jjal);
-                Log.d("1da2222", jjalItemDatas.get(0).getUrl());
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Jjal jjal = ds.getValue(Jjal.class);
+                    Log.d("onChildAdded", jjal.getUrl());
+                    jjalItemDatas.add(jjal);
+                }
                 adapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Jjal jjal = dataSnapshot.getValue(Jjal.class);
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d("onDataChange", "data loading end");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
             }
         };
 
-        mDatabaseReference.addChildEventListener(mChildEventListener);
+        //mDatabaseReference.addChildEventListener(mChildEventListener);
+        mDatabaseReference.addValueEventListener(mValueEventListener);
 
     }
 

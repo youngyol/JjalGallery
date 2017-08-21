@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.adapters.JjalAdapter;
 import org.horaapps.leafpic.data.Jjal;
+import org.horaapps.leafpic.util.EndlessRecyclerViewScrollListener;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import horaapps.org.liz.ThemeHelper;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
@@ -38,11 +40,15 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 public class JjalsFragment extends BaseFragment {
 
+    private EndlessRecyclerViewScrollListener scrollListener;
     @BindView(R.id.jjal_album)
     RecyclerView rv;
 
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout refresh;
+
+    @BindView(R.id.progress_bar_jjal)
+    SmoothProgressBar mProgressBar;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
@@ -63,7 +69,6 @@ public class JjalsFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initFirebaseDatabase();
-
     }
 
     @Override
@@ -84,24 +89,41 @@ public class JjalsFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        ctx = getContext();
-        int spanCount = 2;
+
+
+        mProgressBar.progressiveStart();
+         ctx = getContext();
+
+
+        int spanCount = 1;
         spacingDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
         rv.setHasFixedSize(true);
         rv.addItemDecoration(spacingDecoration);
         rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
 
+        scrollListener = new EndlessRecyclerViewScrollListener(new GridLayoutManager(getContext(), spanCount)) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+//                loadNextDataFromApi(page);
+            }
+        };
+
+        rv.addOnScrollListener(scrollListener);
 
 
         refresh.setOnRefreshListener(this::display);
+
         adapter = new JjalAdapter(getContext(), jjalItemDatas);
 
         rv.setAdapter(adapter);
-
 //        setListener();
 
-    }
+
+
+     }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -125,9 +147,12 @@ public class JjalsFragment extends BaseFragment {
                     Log.d("onChildAdded", jjal.getUrl());
                     jjalItemDatas.add(jjal);
                 }
-                adapter.notifyDataSetChanged();
 
                 Log.d("onDataChange", "data loading end");
+
+                mProgressBar.progressiveStop();
+                mProgressBar.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
             }
 
             @Override

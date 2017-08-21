@@ -99,7 +99,7 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
             holder.gifIcon.setVisibility(View.VISIBLE);
              holder.gifIcon.setBackgroundColor(Color.parseColor("#64000000") );
 
-            holder.gifIcon.setPaddingDp(1);
+            holder.gifIcon.setPaddingDp(2);
             VHItem.imageView.setController(gifController);
         }
         else {

@@ -20,8 +20,8 @@
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/gif_icon"
-        android:layout_width="@dimen/icon_sub_width_height"
-        android:layout_height="@dimen/icon_sub_width_height"
+        android:layout_width="@dimen/icon_sub_width_height_jjal"
+        android:layout_height="@dimen/icon_sub_width_height_jjal"
         android:layout_marginBottom="2dp"
         android:layout_marginStart="4dp"
         android:layout_alignParentBottom="true"

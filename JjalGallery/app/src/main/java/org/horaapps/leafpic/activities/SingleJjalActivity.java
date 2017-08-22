@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -378,11 +379,10 @@ public class SingleJjalActivity extends SharedMediaActivity {
 
             case R.id.action_share:
                 Intent share = new Intent(Intent.ACTION_SEND);
-//                share.setType(StringUtils.getMimeType(jjalImageItems.get(position).getUrl()));
-//                share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(bookmarkImageItems.get(position).path)));
-//                startActivity(Intent.createChooser(share, getString(R.string.send_to)));
-
-
+                Uri uri = Uri.parse(jjalImageItems.get(position).getUrl());
+                share.setType("image/*");
+                share.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivity(Intent.createChooser(share, getString(R.string.send_to)));
                 return true;
 //
 //            case R.id.action_bookmark:
@@ -414,6 +414,7 @@ public class SingleJjalActivity extends SharedMediaActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 
 }

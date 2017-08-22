@@ -1,12 +1,9 @@
 package org.horaapps.leafpic.util;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -16,17 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.drew.lang.GeoLocation;
-import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
@@ -36,7 +27,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.Locale;
 
 import horaapps.org.liz.ThemeHelper;
 import horaapps.org.liz.ThemedActivity;
@@ -112,54 +102,6 @@ public class AlertDialogsHelper {
         return progressDialog.create();
     }
 
-    public static AlertDialog getDetailsDialog(final ThemedActivity activity, final Media f) {
-        AlertDialog.Builder detailsDialogBuilder = new AlertDialog.Builder(activity, activity.getDialogStyle());
-        MediaDetailsMap<String, String> mainDetails = new MediaDetailsMap<>();//f.getMainDetails(activity.getApplicationContext());
-        final View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_media_detail, null);
-        ImageView imgMap = (ImageView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.photo_map);
-        dialogLayout.findViewById(org.horaapps.leafpic.R.id.details_title).setBackgroundColor(activity.getPrimaryColor());
-        ((CardView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.photo_details_card)).setCardBackgroundColor(activity.getCardBackgroundColor());
-
-        final GeoLocation location;
-        if ((location = f.getGeoLocation()) != null) {
-
-            StaticMapProvider staticMapProvider = StaticMapProvider.fromValue(
-                    Hawk.get(activity.getString(R.string.preference_map_provider), StaticMapProvider.GOOGLE_MAPS.getValue()));
-
-            Glide.with(activity.getApplicationContext())
-                    .load(staticMapProvider.getUrl(location))
-                    .into(imgMap);
-
-            imgMap.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    try {
-                        activity.startActivity(new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(String.format(Locale.ENGLISH, "geo:%f,%f?z=%d", location.getLatitude(), location.getLongitude(), 17))));
-                    } catch (ActivityNotFoundException e) {
-                        Toast.makeText(activity, R.string.no_app_to_perform, Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            });
-
-            imgMap.setVisibility(View.VISIBLE);
-            dialogLayout.findViewById(org.horaapps.leafpic.R.id.details_title).setVisibility(View.GONE);
-
-        } else imgMap.setVisibility(View.GONE);
-
-        final TextView showMoreText = (TextView) dialogLayout.findViewById(R.id.details_showmore);
-        showMoreText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showMoreDetails(dialogLayout, activity, f);
-                showMoreText.setVisibility(View.GONE);
-            }
-        });
-
-        detailsDialogBuilder.setView(dialogLayout);
-        loadDetails(dialogLayout,activity, mainDetails);
-        return detailsDialogBuilder.create();
-    }
 
     private static void loadDetails(View dialogLayout, ThemedActivity activity, MediaDetailsMap<String, String> metadata) {
         LinearLayout detailsTable = (LinearLayout) dialogLayout.findViewById(R.id.ll_list_details);

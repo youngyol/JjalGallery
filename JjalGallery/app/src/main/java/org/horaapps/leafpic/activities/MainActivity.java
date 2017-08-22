@@ -380,11 +380,9 @@ public class MainActivity extends SharedMediaActivity {
         switch (item.getItemId()) {
 //
 //            case R.id.settings:
-//                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-//                return true;
+ //                return true;
 
 
-            //region Affix
             // TODO: 11/21/16 move away from here
 
 

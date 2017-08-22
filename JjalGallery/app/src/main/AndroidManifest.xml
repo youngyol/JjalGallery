@@ -113,31 +113,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.SettingsActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/settings"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.SETTING" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
-        <!--
-             <meta-data
-            android:name="org.horaapps.leafpic.CustomGlideModule"
-            android:value="GlideModule" />
-        -->
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -172,26 +152,7 @@
 
                 <data android:mimeType="image/*" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.albumPhoto" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="image/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.android.camera.action.REVIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="image/*" />
-                <data android:mimeType="video/*" />
-            </intent-filter>
         </activity>
         <activity android:name=".activities.SingleJjalActivity"
             android:configChanges="orientation|screenSize|uiMode|screenLayout|navigation"
@@ -202,6 +163,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.horaapps.leafpic.activities.MainActivity" />
 
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="image/*" />
+            </intent-filter>
 
         </activity>
     </application>

@@ -71,8 +71,6 @@ public class Security {
         editTextPassword.getBackground().mutate().setColorFilter(activity.getTextColor(), PorterDuff.Mode.SRC_ATOP);
         editTextPassword.setTextColor(activity.getTextColor());
 
-        //Finger Print
-        //if(FingerPrint.checkFinger(activity))
 
         passwordDialogBuilder.setView(PasswordDialogLayout);
 

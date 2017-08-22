@@ -147,14 +147,23 @@ public class SingleMediaActivity extends SharedMediaActivity {
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+
+        });
 
         setupSystemUI();
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
-                (visibility -> {
-                    if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
-                    else hideSystemUI();
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int i) {
+                        if ((i & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
+                        else hideSystemUI();
+                    }
                 });
 
         updatePageTitle(position);

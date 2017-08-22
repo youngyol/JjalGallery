@@ -344,8 +344,12 @@ public class MainActivity extends SharedMediaActivity {
     public void resetToolbar() {
         updateToolbar(
                 getString(R.string.app_name),
-                GoogleMaterial.Icon.gmd_menu,
-                v -> drawer.openDrawer(GravityCompat.START));
+                GoogleMaterial.Icon.gmd_menu, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        drawer.openDrawer(GravityCompat.START);
+                    }
+                });
     }
 
     public void nothingToShow(boolean status) {

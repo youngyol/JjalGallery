@@ -1,4 +1,6 @@
 <resources>
+
+    <string name="app_name">짤갤러리</string>
     <!--LEAF PIC STRING'S-->
     <!--<string name="app_name">LeafPic</string>-->
     <string name="app_light_description">A colorful material gallery.</string>
@@ -62,6 +64,7 @@
     <string name="clear_selected">Clear Selected</string>
 
     <string name="share">Share</string>
+    <string name="download">Download</string>
     <string name="rotate">Rotate</string>
     <string name="rotate_right_90">Rotate right 90°</string>
     <string name="rotate_left_90">Rotate left 90°</string>

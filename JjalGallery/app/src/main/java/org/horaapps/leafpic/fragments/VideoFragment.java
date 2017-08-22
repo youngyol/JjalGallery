@@ -72,7 +72,13 @@ public class VideoFragment extends Fragment {
                 .apply(options)
                 .into(picture);
 
-        picture.setOnClickListener(v -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
+        picture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((SingleMediaActivity) getActivity()).toggleSystemUI();
+            }
+        });
+
         return view;
     }
 }

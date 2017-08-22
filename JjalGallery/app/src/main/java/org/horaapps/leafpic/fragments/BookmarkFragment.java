@@ -14,7 +14,7 @@ import android.view.animation.OvershootInterpolator;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
-import org.horaapps.leafpic.activities.SingleImageActivity;
+import org.horaapps.leafpic.activities.SingleBookMarkActivity;
 import org.horaapps.leafpic.adapters.BookmarksAdapter;
 import org.horaapps.leafpic.data.bookmark.Bookmark;
 import org.horaapps.leafpic.data.bookmark.BookmarkDB;
@@ -98,7 +98,7 @@ public class BookmarkFragment extends BaseFragment {
                         String tmppath = bookmarkItemDatas.get(position).path;
 
 
-                        Intent intent = new Intent(getActivity(), SingleImageActivity.class);
+                        Intent intent = new Intent(getActivity(), SingleBookMarkActivity.class);
                         intent.putExtra("bookmarkImg", bookmarkItemDatas);
                         intent.putExtra("position", position);
                         getActivity().startActivity(intent);

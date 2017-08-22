@@ -1,10 +1,12 @@
 package org.horaapps.leafpic.data;
 
+import java.io.Serializable;
+
 /**
  * Created by nasos on 2017-08-18.
  */
 
-public class Jjal {
+public class Jjal implements Serializable {
     public String firebaseKey;
     public String url;
     public int click;

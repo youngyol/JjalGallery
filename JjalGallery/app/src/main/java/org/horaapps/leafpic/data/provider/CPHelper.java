@@ -93,7 +93,7 @@ public class CPHelper {
 
 
     private static Observable<Album> getHiddenAlbums(Context context, ArrayList<String> excludedAlbums) {
-        return Observable.create(subscriber -> {
+        return Observable.create( subscriber -> {
             try {
                 for (File storage : StorageHelper.getStorageRoots(context))
                     fetchRecursivelyHiddenFolder(storage, subscriber, excludedAlbums, Hawk.get("set_include_video", true));

@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.horaapps.leafpic.activities.SingleJjalActivity">
+
+    <item
+        android:id="@+id/action_bookmark"
+        android:title="@string/action_bookmark"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_share"
+        android:orderInCategory="0"
+        android:title="@string/share"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_download"
+        android:orderInCategory="1"
+        android:title="@string/download"
+        app:showAsAction="always" />
+
+</menu>

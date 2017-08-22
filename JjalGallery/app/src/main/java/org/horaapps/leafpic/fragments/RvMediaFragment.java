@@ -101,7 +101,7 @@ public class RvMediaFragment extends BaseFragment {
         CPHelper.getMedia(getContext(), album, sortingMode(), sortingOrder())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media))
+                .filter( media -> MediaFilter.getFilter(album.filterMode()).accept(media))
                 .subscribe(media -> adapter.add(media),
                         throwable -> {
                             refresh.setRefreshing(false);

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
     maven { url "http://dl.bintray.com/dasar/maven" }
@@ -9,16 +10,14 @@ android {
     compileSdkVersion project.sdkVersion
     buildToolsVersion project.buildToolsVersion
     defaultConfig {
-        applicationId "org.horaapps.leafpic"
+        applicationId "com.nasos.jjalgallery"
         minSdkVersion 19
         targetSdkVersion project.sdkVersion
-        versionName "v0.6-beta-2"
-        versionCode 14
+        versionName "1.0.0"
+        versionCode 1
     }
 
     lintOptions {
-        disable 'MissingTranslation'
-        disable 'ExtraTranslation'
         abortOnError false
     }
 
@@ -32,8 +31,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 
     signingConfigs {
@@ -44,26 +43,9 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue "string", "app_name", "LeafPic"
             signingConfig signingConfigs.release
         }
 
-        debug {
-            applicationIdSuffix ".debug"
-            resValue "string", "app_name", "짤 갤러리 new"
-        }
-    }
-
-    flavorDimensions "default"
-
-    productFlavors {
-        noGPlay {
-            dimension "default"
-        }
-
-        withGPlay {
-            dimension "default"
-        }
     }
 }
 
@@ -84,6 +66,10 @@ dependencies {
     // utils
     implementation 'com.github.bumptech.glide:glide:4.0.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
+
+    implementation 'jp.wasabeef:glide-transformations:2.0.2'
+    // If you want to use the GPU Filters
+    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
     implementation 'com.koushikdutta.ion:ion:2.1.7'
     implementation 'com.github.Commit451:bypasses:1.0.4'
     implementation 'com.jakewharton:butterknife:8.8.0'
@@ -93,6 +79,9 @@ dependencies {
     compile 'com.facebook.fresco:fresco:1.4.0'
     compile 'me.relex:photodraweeview:1.1.3'
     compile 'com.facebook.fresco:animated-gif:1.4.0'
+    compile 'com.facebook.fresco:animated-webp:1.4.0'
+    compile 'com.facebook.fresco:webpsupport:1.4.0'
+
 
     // rxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
@@ -131,6 +120,8 @@ dependencies {
 
     implementation 'com.github.castorflex.smoothprogressbar:library:1.1.0'
     implementation 'com.github.castorflex.smoothprogressbar:library-circular:1.2.0'
+
+
 }
 
 Properties props = new Properties()

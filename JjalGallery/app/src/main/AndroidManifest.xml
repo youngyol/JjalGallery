@@ -119,6 +119,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SETTING" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
@@ -155,19 +156,20 @@
 
         <activity android:name=".activities.JjalActivity" />
         <activity
-            android:name=".activities.SingleImageActivity"
+            android:name=".activities.SingleBookMarkActivity"
             android:configChanges="orientation|screenSize|uiMode|screenLayout|navigation"
             android:label="@string/app_name"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.horaapps.leafpic.activities.MainActivity" />
 
             <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
             <intent-filter>
@@ -177,15 +179,30 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="com.android.camera.action.REVIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
                 <data android:mimeType="video/*" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activities.SingleJjalActivity"
+            android:configChanges="orientation|screenSize|uiMode|screenLayout|navigation"
+            android:label="@string/app_name"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.horaapps.leafpic.activities.MainActivity" />
+
+
         </activity>
     </application>
 

@@ -172,9 +172,9 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        Media f = media.get(position);
+        final Media f = media.get(position);
 
         //holder.path.setTag(f);
         holder.icon.setVisibility(View.GONE);
@@ -285,29 +285,37 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
             holder.layout.setPadding(0,0,0,0);
         }
 
-        holder.layout.setOnClickListener(v -> {
-            if (selecting()) {
-                notifySelected(f.toggleSelected());
-                notifyItemChanged(position);
-                onChangeSelectedSubject.onNext(f);
-            } else
-                onClickSubject.onNext(position);
-        });
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selecting()){
+                    notifySelected(f.toggleSelected());
+                    notifyItemChanged(position);
+                    onChangeSelectedSubject.onNext(f);
 
-        holder.layout.setOnLongClickListener(v -> {
-            if (!selecting()) {
-                // If it is the first long press
-                notifySelected(f.toggleSelected());
-                notifyItemChanged(position);
-                onChangeSelectedSubject.onNext(f);
-            } else {
-                selectAllUpTo(f);
-                onChangeSelectedSubject.onNext(new Media());
+                }
+                else                onClickSubject.onNext(position);
+
             }
-
-
-            return true;
         });
+
+
+        holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (!selecting()) {
+                    // If it is the first long press
+                    notifySelected(f.toggleSelected());
+                    notifyItemChanged(position);
+                    onChangeSelectedSubject.onNext(f);
+                } else {
+                    selectAllUpTo(f);
+                    onChangeSelectedSubject.onNext(new Media());
+                }
+                return true;
+            }
+        });
+
     }
 
     @Override

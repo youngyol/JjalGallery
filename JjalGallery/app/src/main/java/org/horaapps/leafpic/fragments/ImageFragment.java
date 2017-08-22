@@ -80,7 +80,12 @@ public class ImageFragment extends Fragment {
 
         calculate();
         displayMedia();
-        photoView.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((SingleMediaActivity) getActivity()).toggleSystemUI();
+            }
+        });
         photoView.setMaximumScale(8.0F);
         photoView.setMediumScale(3.0F);
 

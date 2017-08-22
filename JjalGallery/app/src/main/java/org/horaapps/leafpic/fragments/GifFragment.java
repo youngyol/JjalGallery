@@ -12,13 +12,17 @@ import android.view.ViewGroup;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.data.Jjal;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.bookmark.Bookmark;
+import org.horaapps.leafpic.util.CircleProgressBarDrawable;
 
 import java.io.File;
 
@@ -34,6 +38,7 @@ public class GifFragment extends Fragment {
     private int deviceHeight ;
 
     private String bookmarkImgPath;
+    private String jjalImgPath;
 
     private void calculate() {
         DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -62,7 +67,13 @@ public class GifFragment extends Fragment {
         return imageFragment;
     }
 
-
+    public static GifFragment newInstance(Jjal media) {
+        GifFragment imageFragment = new GifFragment();
+        Bundle args = new Bundle();
+        args.putString("jjal", media.getUrl());
+        imageFragment.setArguments(args);
+        return imageFragment;
+    }
 
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +81,7 @@ public class GifFragment extends Fragment {
         calculate();
         gif = getArguments().getParcelable("gif");
         bookmarkImgPath = getArguments().getString("bookmark"," ");
+        jjalImgPath= getArguments().getString("jjal"," ");
 
     }
 
@@ -83,23 +95,27 @@ public class GifFragment extends Fragment {
 //
 
         PhotoDraweeView img = new PhotoDraweeView(container.getContext());
-
+        Uri uri;
         File imgFile;
-        if(bookmarkImgPath.equals(" ")) {
+        if(bookmarkImgPath.equals(" ") && jjalImgPath.equals(" ")) {
             imgFile= new File(gif.getPath());
-
-
+            uri = Uri.fromFile(imgFile);
         }
-        else{
+        else if(jjalImgPath.equals(" ")){
 
             imgFile = new File(bookmarkImgPath);
+            uri = Uri.fromFile(imgFile);
+
+
+        }else{
+
+            uri= Uri.parse(jjalImgPath);
 
 
         }
-        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.fromFile(imgFile))
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                 .setResizeOptions(new ResizeOptions(deviceWidth, 100))
                 .build();
-
         PipelineDraweeControllerBuilder controller1 = Fresco.newDraweeControllerBuilder();
         controller1.setImageRequest(request);
         controller1.setOldController(img.getController());
@@ -116,6 +132,15 @@ public class GifFragment extends Fragment {
         });
 
 
+        final CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
+//        progressBar.setColor(getResources().getColor(R.color.md_red_A400));
+//        progressBar.setBackgroundColor(getResources().getColor(R.color.md_grey_400));
+
+        progressBar.setBackgroundColor(getResources().getColor(R.color.md_grey_400));
+        progressBar.setColor(getResources().getColor(R.color.md_red_A400));
+        GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
+        builder.setFadeDuration(30).setProgressBarImage(progressBar).build();
+         img.getHierarchy().setProgressBarImage(progressBar);
         img.setController(controller1.build());
 
 

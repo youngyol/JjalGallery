@@ -52,9 +52,9 @@ import butterknife.ButterKnife;
 import horaapps.org.liz.ColorPalette;
 
 
-public class SingleImageActivity extends SharedMediaActivity {
+public class SingleBookMarkActivity extends SharedMediaActivity {
 
-    private static final String TAG = SingleImageActivity.class.getSimpleName();
+    private static final String TAG = SingleBookMarkActivity.class.getSimpleName();
 
     private boolean isBookmarkChecked = false;
 
@@ -73,21 +73,20 @@ public class SingleImageActivity extends SharedMediaActivity {
 
 
     private MenuItem menuBookmarkItem;
-    private ArrayList<Bookmark>  bookmarkImageItems;
+    private ArrayList<Bookmark> bookmarkImageItems;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_image);
+        setContentView(R.layout.activity_single_bookmark);
         ButterKnife.bind(this);
 
         bookmarkImageItems = new ArrayList<Bookmark>();
         Intent intent = getIntent();
-        bookmarkImageItems =(ArrayList<Bookmark>)intent.getExtras().get("bookmarkImg");
+        bookmarkImageItems = (ArrayList<Bookmark>) intent.getExtras().get("bookmarkImg");
         position = intent.getExtras().getInt("position");
 
         adapter = new ImagesPagerAdapter(getSupportFragmentManager(), bookmarkImageItems);
-
 
 
         initUi();
@@ -96,18 +95,27 @@ public class SingleImageActivity extends SharedMediaActivity {
     private void initUi() {
 
 
-
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+
+        });
+
 
         setupSystemUI();
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
-                (visibility -> {
-                    if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
-                    else hideSystemUI();
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int i) {
+                        if ((i & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
+                        else hideSystemUI();
+                    }
                 });
 
         updatePageTitle(position);
@@ -122,7 +130,7 @@ public class SingleImageActivity extends SharedMediaActivity {
 
             @Override
             public void onPageSelected(int position) {
-                SingleImageActivity.this.position = position;
+                SingleBookMarkActivity.this.position = position;
 
                 updatePageTitle(position);
                 supportInvalidateOptionsMenu();
@@ -139,6 +147,7 @@ public class SingleImageActivity extends SharedMediaActivity {
             onConfigurationChanged(configuration);
         }
     }
+
     private void updatePageTitle(int position) {
         getSupportActionBar().setTitle((position + 1) + " " + getString(R.string.of) + " " + adapter.getCount());
     }
@@ -150,6 +159,7 @@ public class SingleImageActivity extends SharedMediaActivity {
         Glide.get(getApplicationContext()).trimMemory(TRIM_MEMORY_COMPLETE);
         System.gc();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -158,12 +168,13 @@ public class SingleImageActivity extends SharedMediaActivity {
 //        menu.findItem(R.id.action_delete).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_delete));
         menu.findItem(R.id.action_share).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_share));
         menu.findItem(R.id.action_bookmark).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_heart_outline));
-         menuBookmarkItem = menu.findItem(R.id.action_bookmark);
+        menuBookmarkItem = menu.findItem(R.id.action_bookmark);
 
-        isBookmarkChecked =checkDBForBookmark(bookmarkImageItems.get(position).path);
+        isBookmarkChecked = checkDBForBookmark(bookmarkImageItems.get(position).path);
         setBookmarkIconColor();
         return true;
     }
+
     @CallSuper
     public void updateUiElements() {
         super.updateUiElements();
@@ -217,7 +228,6 @@ public class SingleImageActivity extends SharedMediaActivity {
     }
 
 
-
     private void showSystemUI() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -238,9 +248,9 @@ public class SingleImageActivity extends SharedMediaActivity {
         int colorFrom;
         if (fullScreenMode) {
             colorFrom = getBackgroundColor();
-            colorTo = (ContextCompat.getColor(SingleImageActivity.this, R.color.md_black_1000));
+            colorTo = (ContextCompat.getColor(SingleBookMarkActivity.this, R.color.md_black_1000));
         } else {
-            colorFrom = (ContextCompat.getColor(SingleImageActivity.this, R.color.md_black_1000));
+            colorFrom = (ContextCompat.getColor(SingleBookMarkActivity.this, R.color.md_black_1000));
             colorTo = getBackgroundColor();
         }
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
@@ -300,6 +310,7 @@ public class SingleImageActivity extends SharedMediaActivity {
 
 
     }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         if (mViewPager != null) {
@@ -357,6 +368,7 @@ public class SingleImageActivity extends SharedMediaActivity {
 
         return options;
     }
+
     private void updateBrightness(float level) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.screenBrightness = level;
@@ -395,11 +407,11 @@ public class SingleImageActivity extends SharedMediaActivity {
 //                setBookmarkIconColor();
 
 
-                    bookmarkImageItems.remove(position);
+                bookmarkImageItems.remove(position);
 
-                    if (bookmarkImageItems.size() == 0) {
-                        displayAlbums();
-                    }
+                if (bookmarkImageItems.size() == 0) {
+                    displayAlbums();
+                }
 
                 adapter.notifyDataSetChanged();
                 updatePageTitle(mViewPager.getCurrentItem());
@@ -426,7 +438,6 @@ public class SingleImageActivity extends SharedMediaActivity {
 //
 //
 //                break;
-
 
 
             default:

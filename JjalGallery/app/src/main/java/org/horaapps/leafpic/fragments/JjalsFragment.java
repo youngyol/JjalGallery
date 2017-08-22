@@ -1,6 +1,7 @@
 package org.horaapps.leafpic.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -20,10 +22,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.activities.SingleJjalActivity;
 import org.horaapps.leafpic.adapters.JjalAdapter;
 import org.horaapps.leafpic.data.Jjal;
 import org.horaapps.leafpic.util.EndlessRecyclerViewScrollListener;
 import org.horaapps.leafpic.util.Measure;
+import org.horaapps.leafpic.util.RecyclerItemClickListener;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
@@ -41,6 +45,15 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
 public class JjalsFragment extends BaseFragment {
 
     private EndlessRecyclerViewScrollListener scrollListener;
+
+
+    private int previousTotal = 0;
+    private boolean loading = true;
+    private int visibleThreshold = 5;
+    int firstVisibleItem, visibleItemCount, totalItemCount;
+
+    private  GridLayoutManager mLayoutManager;
+
     @BindView(R.id.jjal_album)
     RecyclerView rv;
 
@@ -95,23 +108,63 @@ public class JjalsFragment extends BaseFragment {
          ctx = getContext();
 
 
-        int spanCount = 1;
+        int spanCount = 2;
         spacingDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
         rv.setHasFixedSize(true);
         rv.addItemDecoration(spacingDecoration);
-        rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+
+
+
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                visibleItemCount = rv.getChildCount();
+                totalItemCount = mLayoutManager.getItemCount();
+                firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
+
+                if (loading) {
+                    if (totalItemCount > previousTotal) {
+                        loading = false;
+                        previousTotal = totalItemCount;
+                    }
+                }
+                if (!loading && (totalItemCount - visibleItemCount)
+                        <= (firstVisibleItem + visibleThreshold)) {
+                    // End has been reached
+
+                    Log.i("Yaeye!", "end called");
+
+                    // Do something
+
+                    loading = true;
+                }
+            }
+        });
+
+
+
+
+
+
+
+        mLayoutManager = new GridLayoutManager(getActivity(), spanCount);
+
+        rv.setLayoutManager(mLayoutManager);
         rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
 
-        scrollListener = new EndlessRecyclerViewScrollListener(new GridLayoutManager(getContext(), spanCount)) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-//                loadNextDataFromApi(page);
-            }
-        };
+//        scrollListener = new EndlessRecyclerViewScrollListener(new GridLayoutManager(getContext(), spanCount)) {
+//            @Override
+//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+//                // Triggered only when new data needs to be appended to the list
+//                // Add whatever code is needed to append new items to the bottom of the list
+////                loadNextDataFromApi(page);
+//            }
+//        };
 
-        rv.addOnScrollListener(scrollListener);
+//        rv.addOnScrollListener(scrollListener);
 
 
         refresh.setOnRefreshListener(this::display);
@@ -119,7 +172,7 @@ public class JjalsFragment extends BaseFragment {
         adapter = new JjalAdapter(getContext(), jjalItemDatas);
 
         rv.setAdapter(adapter);
-//        setListener();
+        setListener();
 
 
 
@@ -168,29 +221,26 @@ public class JjalsFragment extends BaseFragment {
 
 
     private void setListener() {
+        rv.addOnItemTouchListener(
+                new RecyclerItemClickListener(rv, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Toast.makeText(ctx,position+"  " + jjalItemDatas.get(position).getUrl(),Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getActivity(), SingleJjalActivity.class);
+                        intent.putExtra("jjal", jjalItemDatas);
+                        intent.putExtra("position", position);
+                        ctx.startActivity(intent);
 
 
-//        rv.addOnItemTouchListener(
-//                new RecyclerItemClickListener(rv, new RecyclerItemClickListener.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View view, int position) {
-//                        String tmppath = bookmarkItemDatas.get(position).path;
-//
-//
-//                        Intent intent = new Intent(getActivity(), SingleImageActivity.class);
-//                        intent.putExtra("bookmarkImg", bookmarkItemDatas);
-//                        intent.putExtra("position", position);
-//                        getActivity().startActivity(intent);
-//
-//
-//                    }
-//
-//                    @Override
-//                    public void onLongItemClick(View view, int position) {
-//                    }
-//                }));
+                    }
 
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                    }
+                }));
     }
+
+
     private void display() {
 
         adapter.clear();

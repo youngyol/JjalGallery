@@ -62,8 +62,8 @@ public class SplashScreen extends SharedMediaActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-//        setNavBarColor();
-//        setStatusBarColor();
+        setNavBarColor();
+        setStatusBarColor();
 
         if (PermissionUtils.isDeviceInfoGranted(this)) {
 
@@ -78,13 +78,14 @@ public class SplashScreen extends SharedMediaActivity {
                         start();
                     }
                 } else StringUtils.showToast(getApplicationContext(), "Album not found");
-            } else  // default intent
+            } else{  // default intent{
                 start();
-
+        }
             PICK_INTENT = getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK);
 
         } else
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, Manifest.permission.READ_EXTERNAL_STORAGE);
+        Log.d("!21212111tag", "onCreate: 시작이다.");
 
 //        startLookingForMedia();
     }

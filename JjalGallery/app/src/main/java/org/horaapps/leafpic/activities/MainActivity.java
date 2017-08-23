@@ -1,18 +1,13 @@
 package org.horaapps.leafpic.activities;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.CallSuper;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -27,7 +22,6 @@ import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
@@ -40,6 +34,7 @@ import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.StorageHelper;
 import org.horaapps.leafpic.data.bookmark.BookmarkDB;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
+import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.BookmarkFragment;
 import org.horaapps.leafpic.fragments.EmptyFragment;
 import org.horaapps.leafpic.fragments.JjalsFragment;
@@ -61,8 +56,6 @@ public class MainActivity extends SharedMediaActivity {
 
     AlbumsFragment albumsFragment = new AlbumsFragment();
 
-    @BindView(R.id.fab_camera)
-    FloatingActionButton fab;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.toolbar)
@@ -135,16 +128,6 @@ public class MainActivity extends SharedMediaActivity {
                 .commit();
     }
 
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation != Configuration.ORIENTATION_LANDSCAPE) {
-            fab.setVisibility(View.VISIBLE);
-            fab.animate().translationY(fab.getHeight() * 2).start();
-        } else
-            fab.setVisibility(View.GONE);
-    }
 
     public void goBackToAlbums() {
         albumsMode = true;
@@ -248,14 +231,7 @@ public class MainActivity extends SharedMediaActivity {
             }
         });
 
-        /**** FAB ***/
-        fab.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
-            }
-        });
+
     }
 
     @Override
@@ -300,8 +276,6 @@ public class MainActivity extends SharedMediaActivity {
         setStatusBarColor();
         setNavBarColor();
 
-        fab.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
-        fab.setVisibility(Hawk.get(getString(R.string.preference_show_fab), false) ? View.VISIBLE : View.GONE);
         mainLayout.setBackgroundColor(getBackgroundColor());
 
         setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
@@ -395,36 +369,52 @@ public class MainActivity extends SharedMediaActivity {
     }
 
 
-//    @Override
-//    public void onBackPressed() {
-//
-//        if (albumsMode) {
-//            if (!albumsFragment.onBackPressed()) {
-//                if (drawer.isDrawerOpen(GravityCompat.START))
-//                    drawer.closeDrawer(GravityCompat.START);
-//                else finish();
-//            }
-//        } else {
-//            if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag("media")).onBackPressed())
-//                goBackToAlbums();
-//        }
-//    }
-
     @Override
     public void onBackPressed() {
+
         long tempTime = System.currentTimeMillis();
         long intervalTime = tempTime - backPressedTime;
+        if (albumsMode) {
+            if (!albumsFragment.onBackPressed()) {
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+                else{
+                    if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime)
+                    {
+                        super.onBackPressed();
+                        finish();
+                    }
+                    else
+                    {
+                        backPressedTime = tempTime;
+                        Toast.makeText(getApplicationContext(), "종료하려면 뒤로가기 버튼을 한 번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        } else {
+            if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag("media")).onBackPressed())
+                goBackToAlbums();
+        }
 
-        if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime)
-        {
-            super.onBackPressed();
-        }
-        else
-        {
-            backPressedTime = tempTime;
-            Toast.makeText(getApplicationContext(), "종료하려면 뒤로가기 버튼을 한 번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
-        }
+
     }
+//
+////    @Override
+////    public void onBackPressed() {
+//        long tempTime = System.currentTimeMillis();
+//        long intervalTime = tempTime - backPressedTime;
+//
+//        if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime)
+//        {
+//            super.onBackPressed();
+//        }
+//        else
+//        {
+//            backPressedTime = tempTime;
+//            Toast.makeText(getApplicationContext(), "종료하려면 뒤로가기 버튼을 한 번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
+//        }
+////    }
 
 
 }

@@ -52,7 +52,7 @@ public class JjalsFragment extends BaseFragment {
     private int visibleThreshold = 5;
     int firstVisibleItem, visibleItemCount, totalItemCount;
 
-    private  GridLayoutManager mLayoutManager;
+    private GridLayoutManager mLayoutManager;
 
     @BindView(R.id.jjal_album)
     RecyclerView rv;
@@ -71,6 +71,10 @@ public class JjalsFragment extends BaseFragment {
 
     private static final String TAG = "asd";
 
+    private int startIndex = 0;
+    private int  GETTING_DATA_COUNT =10;
+
+    private int MAX_DATA_COUNT =130;
 
     private GridSpacingItemDecoration spacingDecoration;
     private Context ctx;
@@ -98,6 +102,7 @@ public class JjalsFragment extends BaseFragment {
     public void refreshTheme(ThemeHelper themeHelper) {
 
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -105,46 +110,13 @@ public class JjalsFragment extends BaseFragment {
 
 
         mProgressBar.progressiveStart();
-         ctx = getContext();
+        ctx = getContext();
 
 
         int spanCount = 2;
         spacingDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
         rv.setHasFixedSize(true);
         rv.addItemDecoration(spacingDecoration);
-
-
-
-        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                visibleItemCount = rv.getChildCount();
-                totalItemCount = mLayoutManager.getItemCount();
-                firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
-
-                if (loading) {
-                    if (totalItemCount > previousTotal) {
-                        loading = false;
-                        previousTotal = totalItemCount;
-                    }
-                }
-                if (!loading && (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem + visibleThreshold)) {
-                    // End has been reached
-
-                    Log.i("Yaeye!", "end called");
-
-                    // Do something
-
-                    loading = true;
-                }
-            }
-        });
-
-
 
 
 
@@ -172,11 +144,30 @@ public class JjalsFragment extends BaseFragment {
         adapter = new JjalAdapter(getContext(), jjalItemDatas);
 
         rv.setAdapter(adapter);
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+                    int lastPosition = ((GridLayoutManager) manager).findLastVisibleItemPosition();
+                    Log.d("dASADDD",lastPosition+"     "+adapter.getSize());
+                    if ((lastPosition + 2) >= (adapter.getSize() - 1) && startIndex + GETTING_DATA_COUNT == adapter.getSize()) {
+                        if (startIndex + GETTING_DATA_COUNT < MAX_DATA_COUNT) {
+                            startIndex = adapter.getSize();
+                            Log.d("Meojium/MuseumList", "startIndex: " + startIndex);
+
+                            adapter.loadMore();
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+        });
         setListener();
 
 
+    }
 
-     }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -195,7 +186,7 @@ public class JjalsFragment extends BaseFragment {
         mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Jjal jjal = ds.getValue(Jjal.class);
                     Log.d("onChildAdded", jjal.getUrl());
                     jjalItemDatas.add(jjal);
@@ -225,7 +216,7 @@ public class JjalsFragment extends BaseFragment {
                 new RecyclerItemClickListener(rv, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Toast.makeText(ctx,position+"  " + jjalItemDatas.get(position).getUrl(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx, position + "  " + jjalItemDatas.get(position).getUrl(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getActivity(), SingleJjalActivity.class);
                         intent.putExtra("jjal", jjalItemDatas);
                         intent.putExtra("position", position);

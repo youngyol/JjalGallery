@@ -182,6 +182,9 @@
     <color name="md_grey_850">#303030</color>
     <color name="md_grey_900">#212121</color>
 
+    <color name="trans_md_grey_400">#3ebdbdbd</color>
+
+
     <color name="md_indigo_100">#C5CAE9</color>
     <color name="md_indigo_200">#9FA8DA</color>
     <color name="md_indigo_300">#7986CB</color>
@@ -301,6 +304,8 @@
     <color name="md_red_A200">#FF5252</color>
     <color name="md_red_A400">#FF1744</color>
     <color name="md_red_A700">#D50000</color>
+
+    <color name="trans_md_red_A400">#4bff1744</color>
 
     <color name="md_teal_100">#B2DFDB</color>
     <color name="md_teal_200">#80CBC4</color>

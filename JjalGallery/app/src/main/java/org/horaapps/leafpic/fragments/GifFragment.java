@@ -136,8 +136,8 @@ public class GifFragment extends Fragment {
 //        progressBar.setColor(getResources().getColor(R.color.md_red_A400));
 //        progressBar.setBackgroundColor(getResources().getColor(R.color.md_grey_400));
 
-        progressBar.setBackgroundColor(getResources().getColor(R.color.md_grey_400));
-        progressBar.setColor(getResources().getColor(R.color.md_red_A400));
+        progressBar.setBackgroundColor(getResources().getColor(R.color.trans_md_grey_400));
+        progressBar.setColor(getResources().getColor(R.color.trans_md_red_A400));
         GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
         builder.setFadeDuration(30).setProgressBarImage(progressBar).build();
         img.getHierarchy().setProgressBarImage(progressBar);

@@ -35,6 +35,7 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
     private ArrayList<Jjal> jjals;
     private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
 
+    private  int size = 10 ;
     private Drawable placeholder;
     private Context ctx;
 
@@ -46,7 +47,13 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
 
     }
 
+    public void loadMore(){
+        size+=10;
+    }
 
+    public int getSize(){
+        return size;
+    }
     @Override
     public JjalAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new JjalAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_photo, parent, false));
@@ -144,7 +151,8 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return jjals.size();
+        if(jjals.size() > 10) return  size;
+        else return jjals.size();
     }
 
     static class ViewHolder extends ThemedViewHolder {

@@ -38,45 +38,46 @@ import io.reactivex.subjects.PublishSubject;
 public class BookmarksAdapter extends ThemedAdapter<BookmarksAdapter.ViewHolder> {
     private ArrayList<Bookmark> bookmarks;
     private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
-
     private Drawable placeholder;
-
-
     public BookmarksAdapter(Context context,ArrayList<Bookmark> items) {
         super(context);
         bookmarks = items;
         placeholder = getThemeHelper().getPlaceHolder();
-
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_photo, parent, false));
-
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ViewHolder VHItem = (ViewHolder) holder;
-
         holder.icon.setVisibility(View.GONE);
-
         File imgFile = new File(bookmarks.get(position).path);
 
         RequestOptions options = new RequestOptions()
                 .format(DecodeFormat.PREFER_ARGB_8888)
                 .centerCrop()
                 .placeholder(placeholder)
-                //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+       if (bookmarks.get(position).path.contains("https://")){
+           Log.d("bookmark", bookmarks.get(position).path);
+           Glide.with(holder.imageView.getContext())
+                   .asBitmap()
+                   .load(bookmarks.get(position).path)
+                   .apply(options)
+                    .thumbnail(0.07f)
+                   .into(VHItem.imageView);
+       }
+       else{
 
-
-        Glide.with(holder.imageView.getContext())
-                .load(imgFile)
-                .apply(options)
-                .thumbnail(0.5f)
-                .into(VHItem.imageView);
-
+           Glide.with(holder.imageView.getContext())
+                   .load(imgFile)
+                   .apply(options)
+                   .thumbnail(0.5f)
+                   .into(VHItem.imageView);
+       }
     }
 
 

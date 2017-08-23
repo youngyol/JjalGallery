@@ -393,4 +393,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="error_thumbnail">Unable to find a thumbnail for the album!</string>
     <string name="no_app_to_perform">Unable to found an app to perform this action.</string>
     <string name="deleting_images">We are thorwing away all your media!</string>
+
+
+
+    <string name="no_bookmark">등록된 북마크가 없어요</string>
 </resources>

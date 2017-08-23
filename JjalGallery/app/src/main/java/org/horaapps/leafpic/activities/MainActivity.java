@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -39,7 +40,6 @@ import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.StorageHelper;
 import org.horaapps.leafpic.data.bookmark.BookmarkDB;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
-import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.BookmarkFragment;
 import org.horaapps.leafpic.fragments.EmptyFragment;
 import org.horaapps.leafpic.fragments.JjalsFragment;
@@ -56,7 +56,8 @@ import butterknife.ButterKnife;
 public class MainActivity extends SharedMediaActivity {
 
     private static String TAG = MainActivity.class.getSimpleName();
-
+    private final long FINISH_INTERVAL_TIME = 2000;
+    private long   backPressedTime = 0;
 
     AlbumsFragment albumsFragment = new AlbumsFragment();
 
@@ -394,18 +395,36 @@ public class MainActivity extends SharedMediaActivity {
     }
 
 
+//    @Override
+//    public void onBackPressed() {
+//
+//        if (albumsMode) {
+//            if (!albumsFragment.onBackPressed()) {
+//                if (drawer.isDrawerOpen(GravityCompat.START))
+//                    drawer.closeDrawer(GravityCompat.START);
+//                else finish();
+//            }
+//        } else {
+//            if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag("media")).onBackPressed())
+//                goBackToAlbums();
+//        }
+//    }
+
     @Override
     public void onBackPressed() {
+        long tempTime = System.currentTimeMillis();
+        long intervalTime = tempTime - backPressedTime;
 
-        if (albumsMode) {
-            if (!albumsFragment.onBackPressed()) {
-                if (drawer.isDrawerOpen(GravityCompat.START))
-                    drawer.closeDrawer(GravityCompat.START);
-                else finish();
-            }
-        } else {
-            if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag("media")).onBackPressed())
-                goBackToAlbums();
+        if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime)
+        {
+            super.onBackPressed();
+        }
+        else
+        {
+            backPressedTime = tempTime;
+            Toast.makeText(getApplicationContext(), "종료하려면 뒤로가기 버튼을 한 번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }

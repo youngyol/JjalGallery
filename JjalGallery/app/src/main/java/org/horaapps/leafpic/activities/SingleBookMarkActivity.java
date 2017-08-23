@@ -26,7 +26,6 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -192,11 +191,6 @@ public class SingleBookMarkActivity extends SharedMediaActivity {
         setStatusBarColor();
         setNavBarColor();
         setRecentApp(getString(R.string.app_name));
-
-        //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
-        ((TextView) findViewById(R.id.emoji_easter_egg)).setTextColor(getSubTextColor());
-        ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setTextColor(getSubTextColor());
-
 
         /**** SETTINGS ****/
 

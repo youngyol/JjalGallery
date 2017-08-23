@@ -47,7 +47,6 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
     }
 
 
-
     @Override
     public JjalAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new JjalAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_photo, parent, false));
@@ -114,17 +113,17 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
         RequestOptions options = new RequestOptions()
 //                .format(DecodeFormat.PREFER_ARGB_8888)
                 .centerCrop()
-                .placeholder(placeholder)
+                .placeholder(placeholder).override(100, 100)
                 .error(org.horaapps.leafpic.R.drawable.ic_error)
                 //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
 
 
-
         Glide.with(ctx)
+                .asBitmap()
                 .load(jjals.get(position).getUrl())
                 .apply(options)
-                  .into(VHItem.imageView);
+                .into(VHItem.imageView);
 
     }
 
@@ -147,6 +146,7 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
     public int getItemCount() {
         return jjals.size();
     }
+
     static class ViewHolder extends ThemedViewHolder {
 
         @BindView(R.id.photo_preview)
@@ -164,7 +164,7 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
 
         @Override
         public void refreshTheme(ThemeHelper themeHelper) {
-             Log.wtf("asd", "asdasd");
+            Log.wtf("asd", "asdasd");
         }
     }
 

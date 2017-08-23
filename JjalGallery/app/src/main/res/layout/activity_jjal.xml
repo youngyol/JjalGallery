@@ -24,7 +24,6 @@
                 android:id="@+id/content"
                 />
 
-            <include layout="@layout/there_is_nothing_to_show"/>
 
         </LinearLayout>
 

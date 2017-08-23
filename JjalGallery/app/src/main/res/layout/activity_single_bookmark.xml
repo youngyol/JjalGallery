@@ -19,5 +19,4 @@ android:theme="@style/ThemeOverlay.AppCompat"
     android:id="@+id/images_pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
-<include layout="@layout/there_is_nothing_to_show"/>
-</RelativeLayout>
+ </RelativeLayout>

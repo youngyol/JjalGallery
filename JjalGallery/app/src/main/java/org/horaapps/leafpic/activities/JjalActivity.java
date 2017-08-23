@@ -58,9 +58,6 @@ public class JjalActivity  extends SharedMediaActivity {
         drawerToggle.syncState();
         setStatusBarColor();
         setNavBarColor();
-
-
-
     }
 
 
@@ -73,10 +70,8 @@ public class JjalActivity  extends SharedMediaActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Jjal jjal = dataSnapshot.getValue(Jjal.class);
                 Log.d("1dad11a", jjal.getUrl());
-
-            }
-
-            @Override
+             }
+             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
 

@@ -35,7 +35,7 @@ public class GifFragment extends Fragment {
 
     private Media gif;
     private int deviceWidth;
-    private int deviceHeight ;
+    private int deviceHeight;
 
     private String bookmarkImgPath;
     private String jjalImgPath;
@@ -76,17 +76,19 @@ public class GifFragment extends Fragment {
     }
 
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         calculate();
         gif = getArguments().getParcelable("gif");
-        bookmarkImgPath = getArguments().getString("bookmark"," ");
-        jjalImgPath= getArguments().getString("jjal"," ");
+        bookmarkImgPath = getArguments().getString("bookmark", " ");
+        jjalImgPath = getArguments().getString("jjal", " ");
 
     }
 
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        PhotoView photoView = new PhotoView(container.getContext());
 //        Ion.with(getContext())
 //                .load(gif.getPath())
@@ -95,26 +97,24 @@ public class GifFragment extends Fragment {
 //
 
         PhotoDraweeView img = new PhotoDraweeView(container.getContext());
+
         Uri uri;
         File imgFile;
-        if(bookmarkImgPath.equals(" ") && jjalImgPath.equals(" ")) {
-            imgFile= new File(gif.getPath());
+        if (bookmarkImgPath.equals(" ") && jjalImgPath.equals(" ")) {
+            imgFile = new File(gif.getPath());
             uri = Uri.fromFile(imgFile);
-        }
-        else if(jjalImgPath.equals(" ")){
-
-            imgFile = new File(bookmarkImgPath);
-            uri = Uri.fromFile(imgFile);
-
-
-        }else{
-
-            uri= Uri.parse(jjalImgPath);
-
-
+        } else if (jjalImgPath.equals(" ")) {
+            if (bookmarkImgPath.contains("https://"))
+                uri = Uri.parse(bookmarkImgPath);
+            else {
+                imgFile = new File(bookmarkImgPath);
+                uri = Uri.fromFile(imgFile);
+            }
+        } else {
+            uri = Uri.parse(jjalImgPath);
         }
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(new ResizeOptions(deviceWidth, 100))
+                .setResizeOptions(new ResizeOptions(deviceWidth, 50))
                 .build();
         PipelineDraweeControllerBuilder controller1 = Fresco.newDraweeControllerBuilder();
         controller1.setImageRequest(request);
@@ -140,11 +140,11 @@ public class GifFragment extends Fragment {
         progressBar.setColor(getResources().getColor(R.color.md_red_A400));
         GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
         builder.setFadeDuration(30).setProgressBarImage(progressBar).build();
-         img.getHierarchy().setProgressBarImage(progressBar);
+        img.getHierarchy().setProgressBarImage(progressBar);
         img.setController(controller1.build());
 
 
 //        img.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
-         return img;
+        return img;
     }
 }

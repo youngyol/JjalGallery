@@ -59,6 +59,11 @@ public class BookmarkFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onResume() {
+        display();
+        super.onResume();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,8 +126,7 @@ public class BookmarkFragment extends BaseFragment {
         View v= inflater.inflate(R.layout.fragment_bookmark, null);
             ButterKnife.bind(this, v);
 
-//        Toast.makeText(getActivity(),bookmarkItemDatas.size(),Toast.LENGTH_SHORT).show();
-        return v;
+         return v;
     }
 
 

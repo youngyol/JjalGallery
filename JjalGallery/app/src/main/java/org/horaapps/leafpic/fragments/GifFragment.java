@@ -96,6 +96,7 @@ public class GifFragment extends Fragment {
 //
 //
 
+        final CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
         PhotoDraweeView img = new PhotoDraweeView(container.getContext());
 
         Uri uri;
@@ -112,9 +113,15 @@ public class GifFragment extends Fragment {
             }
         } else {
             uri = Uri.parse(jjalImgPath);
+
+            progressBar.setBackgroundColor(getResources().getColor(R.color.trans_md_grey_400));
+            progressBar.setColor(getResources().getColor(R.color.trans_md_red_A400));
+            GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
+            builder.setFadeDuration(30).setProgressBarImage(progressBar).build();
+            img.getHierarchy().setProgressBarImage(progressBar);
         }
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(new ResizeOptions(deviceWidth, 50))
+                .setResizeOptions(new ResizeOptions(deviceWidth, 10))
                 .build();
         PipelineDraweeControllerBuilder controller1 = Fresco.newDraweeControllerBuilder();
         controller1.setImageRequest(request);
@@ -132,15 +139,9 @@ public class GifFragment extends Fragment {
         });
 
 
-        final CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
 //        progressBar.setColor(getResources().getColor(R.color.md_red_A400));
 //        progressBar.setBackgroundColor(getResources().getColor(R.color.md_grey_400));
 
-        progressBar.setBackgroundColor(getResources().getColor(R.color.trans_md_grey_400));
-        progressBar.setColor(getResources().getColor(R.color.trans_md_red_A400));
-        GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
-        builder.setFadeDuration(30).setProgressBarImage(progressBar).build();
-        img.getHierarchy().setProgressBarImage(progressBar);
         img.setController(controller1.build());
 
 

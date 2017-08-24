@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -26,6 +27,7 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -48,6 +50,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import horaapps.org.liz.ColorPalette;
 
 
@@ -392,6 +395,12 @@ public class SingleBookMarkActivity extends SharedMediaActivity {
             case R.id.action_bookmark:
                 Bookmark tmp = new Bookmark();
                 tmp.path = bookmarkImageItems.get(position).path;
+                Toasty.Config.getInstance()
+                        .setTextColor(getResources().getColor(R.color.md_red_400))
+                        .apply();
+                Toasty.custom(this, getResources().getString(R.string.bookmark_failure_kor), getResources().getDrawable(R.drawable.ic_toasty_failure),
+                        Color.WHITE, Toast.LENGTH_SHORT, true, true).show();
+                Toasty.Config.reset(); // Use this if you want to use the configuration above only onc
 
 
                 long removedID = BookmarkDB.mBookmarkDao.getBookmarkIDByPath(tmp.path);
@@ -441,6 +450,7 @@ public class SingleBookMarkActivity extends SharedMediaActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
 
 

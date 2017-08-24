@@ -244,6 +244,7 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
 
 
         Glide.with(holder.picture.getContext())
+                .asBitmap()
                 .load(f.getPath())
                 .apply(options)
                 .into(holder.picture);

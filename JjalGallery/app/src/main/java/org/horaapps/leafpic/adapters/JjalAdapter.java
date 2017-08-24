@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
@@ -65,62 +67,16 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
         ViewHolder VHItem = (ViewHolder) holder;
         holder.gifIcon.setVisibility(View.GONE);
 
-//        holder.icon.setVisibility(View.GONE);
 
-//        RequestOptions options = new RequestOptions()
-//                .format(DecodeFormat.PREFER_ARGB_8888)
-//                .centerCrop()
-//                .placeholder(placeholder)
-//                //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
-//                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
-//
-//
-//        Glide.with(holder.imageView.getContext())
-//                .load(jjals.get(position).getUrl())
-//                .apply(options)
-//                .thumbnail(0.2f)
-//                .into(VHItem.imageView);
-
-//        if(jjals.get(position).getUrl().contains("GIF?raw=true")) {
-//
-//            DraweeController gifController = Fresco.newDraweeControllerBuilder()
-//                    .setUri(Uri.parse(jjals.get(position).getUrl()))
-//                    .setControllerListener(new BaseControllerListener<ImageInfo>() {
-//                        @Override
-//                        public void onFinalImageSet(
-//                                String id,
-//                                ImageInfo imageInfo,
-//                                Animatable anim) {
-//                            if (anim != null) {
-//                                // start the animation with anim.start() whenever you want
-//                            }
-//                        }
-//                    })
-//                    .build();
-//            holder.gifIcon.setVisibility(View.VISIBLE);
-//             holder.gifIcon.setBackgroundColor(Color.parseColor("#64000000") );
-//
-//            holder.gifIcon.setPaddingDp(2);
-//            VHItem.imageView.setController(gifController);
-//        }
-//        else {
-//            ImageRequest request  = ImageRequestBuilder.newBuilderWithSource(Uri.parse(jjals.get(position).getUrl()))
-//                    .setResizeOptions(new ResizeOptions(90, 90))
-//                    .build();
-//
-//            DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                    .setImageRequest(request)
-//                    .setAutoPlayAnimations(true)
-//                    .build();
-//
-//            VHItem.imageView.setController(controller);
-//        }
-
-
+        if(jjals.get(position).getUrl().contains(".GIF?raw=")){
+            holder.gifIcon.setVisibility(View.VISIBLE);
+            holder.gifIcon.setIcon((GoogleMaterial.Icon.gmd_gif));
+        }
         RequestOptions options = new RequestOptions()
-//                .format(DecodeFormat.PREFER_ARGB_8888)
+                .format(DecodeFormat.PREFER_ARGB_8888)
                 .centerCrop()
-                .placeholder(placeholder).override(100, 100)
+                .placeholder(placeholder)
+                .override(100, 100)
                 .error(org.horaapps.leafpic.R.drawable.ic_error)
                 //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);

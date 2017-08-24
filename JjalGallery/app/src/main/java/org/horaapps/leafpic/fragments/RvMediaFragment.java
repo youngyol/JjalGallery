@@ -89,7 +89,7 @@ public class RvMediaFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        clearSelected();
+         clearSelected();
         updateToolbar();
     }
 
@@ -143,8 +143,7 @@ public class RvMediaFragment extends BaseFragment {
                     intent.putExtra("position", pos);
 
                     getContext().startActivity(intent);
-                    //Toast.makeText(getContext(), album.toString(), Toast.LENGTH_SHORT).show();
-                });
+                 });
 
         adapter.getSelectedClicks()
                 .subscribeOn(Schedulers.newThread())

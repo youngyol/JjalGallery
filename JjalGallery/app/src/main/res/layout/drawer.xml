@@ -117,16 +117,15 @@
                         android:background="@drawable/ripple"
                         android:clickable="true"
                         >
-
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/Drawer_Default_Icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
-                            app:iiv_icon="@string/gmd_image"
                             android:layout_marginLeft="@dimen/big_spacing"
                             android:layout_marginRight="@dimen/big_spacing"
-                            />
+                             />
+
                         <TextView
                             android:id="@+id/Drawer_Default_Item"
                             android:layout_width="wrap_content"
@@ -149,7 +148,6 @@
                         android:orientation="horizontal"
                         android:background="@drawable/ripple"
                         android:clickable="true">
-
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/Drawer_Bookmark_Icon"
                             android:layout_width="@dimen/icon_width_height"
@@ -157,8 +155,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/big_spacing"
                             android:layout_marginRight="@dimen/big_spacing"
-                            app:iiv_icon="gmd-bookmark-border" />
-
+                            />
                         <TextView
                             android:id="@+id/Drawer_Bookmark_Item"
                             android:layout_width="wrap_content"
@@ -171,7 +168,6 @@
                     </LinearLayout>
 
                 <!--TODO: FIX THE LITTLE GRADIENT SHADOW-->
-
                 <View
                     android:id="@+id/Drawer_Body_Divider"
                     android:layout_width="match_parent"
@@ -180,43 +176,6 @@
                     android:layout_marginTop="0dp"
                     android:padding="0dp"
                     />
-
-
-
-                <!--&lt;!&ndash; SETTING &ndash;&gt;-->
-                    <!--<LinearLayout-->
-                        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-                        <!--android:id="@+id/ll_drawer_Setting"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="horizontal"-->
-                        <!--android:background="@drawable/ripple"-->
-                        <!--android:clickable="true"-->
-                        <!--&gt;-->
-
-                        <!--<com.mikepenz.iconics.view.IconicsImageView-->
-                            <!--android:id="@+id/Drawer_Setting_Icon"-->
-                            <!--android:layout_width="@dimen/icon_width_height"-->
-                            <!--android:layout_height="@dimen/icon_width_height"-->
-                            <!--android:layout_gravity="center_vertical"-->
-                            <!--android:layout_marginLeft="@dimen/big_spacing"-->
-                            <!--android:layout_marginRight="@dimen/big_spacing"-->
-                            <!--app:iiv_icon="gmd-settings"-->
-                            <!--/>-->
-                        <!--<TextView-->
-                            <!--android:id="@+id/Drawer_Setting_Item"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:paddingTop="16dp"-->
-                            <!--android:paddingBottom="16dp"-->
-                            <!--android:text="@string/settings"-->
-                            <!--android:textColor="@color/md_dark_background"-->
-                            <!--android:textSize="16sp"-->
-                            <!--/>-->
-                    <!--</LinearLayout>-->
-
-
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -122,6 +122,9 @@ dependencies {
     implementation 'com.github.castorflex.smoothprogressbar:library-circular:1.2.0'
 
 
+    implementation 'com.github.GrenderG:Toasty:1.2.5'
+
+
 }
 
 

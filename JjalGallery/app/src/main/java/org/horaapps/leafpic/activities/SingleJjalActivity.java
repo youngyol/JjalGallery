@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -60,10 +61,11 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import horaapps.org.liz.ColorPalette;
 
 public class SingleJjalActivity extends SharedMediaActivity {
-    private static final String TAG = SingleBookMarkActivity.class.getSimpleName();
+    private static final String TAG = SingleJjalActivity.class.getSimpleName();
 
     private boolean isBookmarkChecked = false;
 
@@ -398,48 +400,20 @@ public class SingleJjalActivity extends SharedMediaActivity {
 //
 
 //                Bitmap imgBitmap = GetImageFromURL()
-                new ImageDownload().execute(jjalImageItems.get(position).getUrl());
+
                 break;
-
-
-            //                 new Thread(new Runnable() {
-//                    public void run() {
-//                        shareBitmap (getBitmapFromURL(jjalImageItems.get(position).getUrl()));
-//
-//                    }
-//                }).start();
-//                return true;
-//
-//            case R.id.action_bookmark:
-//                Bookmark tmp = new Bookmark();
-//                tmp.path = bookmarkImageItems.get(position).path;
-//
-//
-//                long removedID = BookmarkDB.mBookmarkDao.getBookmarkIDByPath(tmp.path);
-//                Boolean tmp1 = BookmarkDB.mBookmarkDao.deleteData(removedID);
-//                isBookmarkChecked = false;
-//
-////                setBookmarkIconColor();
-//
-//
-//                bookmarkImageItems.remove(position);
-//
-//                if (bookmarkImageItems.size() == 0) {
-//                    displayAlbums();
-//                }
-//
-//                adapter.notifyDataSetChanged();
-//                updatePageTitle(mViewPager.getCurrentItem());
-//                break;
-
-
             case R.id.action_bookmark:
                 Bookmark tmp = new Bookmark();
                 tmp.path = jjalImageItems.get(position).getUrl();
                 if (!isBookmarkChecked) {
                     isBookmarkChecked = true;
                     if (BookmarkDB.mBookmarkDao.addBookmark(tmp)) {
-                        Toast.makeText(getApplicationContext(), "insert  " + isBookmarkChecked, Toast.LENGTH_SHORT).show();
+                        Toasty.Config.getInstance()
+                                .setTextColor(getResources().getColor(R.color.md_teal_400))
+                                .apply();
+                        Toasty.custom(SingleJjalActivity.this, getResources().getString(R.string.bookmark_success_kor), getResources().getDrawable(R.drawable.ic_toasty_success),
+                                Color.WHITE, Toast.LENGTH_SHORT, true, true).show();
+                        Toasty.Config.reset(); // Use this if you want to use the configuration above only once
                     }
                 } else {
 
@@ -454,6 +428,7 @@ public class SingleJjalActivity extends SharedMediaActivity {
 
             case R.id.action_download:
                 new ImageDownload().execute(jjalImageItems.get(position).getUrl());
+
                 break;
             default:
                 // If we got here, the user's action was not recognized.
@@ -512,125 +487,74 @@ public class SingleJjalActivity extends SharedMediaActivity {
 
 
     private class ImageDownload extends AsyncTask<String, Void, Void> {
-
-
         /**
          * 파일명
          */
-
         private String fileName;
-
-
         /**
          * 저장할 폴더
          */
-
         private final String SAVE_FOLDER = "/Jjal_gallery";
         boolean isDuplicated = false;
 
         @Override
-
         protected Void doInBackground(String... params) {
-
-
             //다운로드 경로를 지정
-
             String savePath = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
-
-
             File dir = new File(savePath);
-
             //상위 디렉토리가 존재하지 않을 경우 생성
-
             if (!dir.exists()) {
-
                 dir.mkdirs();
-
             }
 
-
             //파일 이름 :날짜_시간
-
             Date day = new Date();
-
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.KOREA);
-
             fileName = String.valueOf(sdf.format(day));
 
-
             //웹 서버 쪽 파일이 있는 경로
-
             String fileUrl = jjalImageItems.get(position).getUrl();
-
-
             String imgName = fileUrl.split("/Animal/")[1].split("\\?raw")[0];
             fileName = imgName.split("\\.")[0];
             Log.d("dada", fileName);
             //다운로드 폴더에 동일한 파일명이 존재하는지 확인
-
             if (new File(savePath + "/" + imgName).exists() == false) {
-                Log.d("sddsddsd", "존재");
+
             } else {
                 isDuplicated = true;
             }
 
-
             String localPath = savePath + "/" + imgName;
-
-
             try {
-
                 URL imgUrl = new URL(fileUrl);
-
                 //서버와 접속하는 클라이언트 객체 생성
-
                 HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();
-
                 int len = conn.getContentLength();
-
                 byte[] tmpByte = new byte[len];
 
                 //입력 스트림을 구한다
-
                 InputStream is = conn.getInputStream();
-
                 File file = new File(localPath);
 
                 //파일 저장 스트림 생성
-
                 FileOutputStream fos = new FileOutputStream(file);
-
                 int read;
 
                 //입력 스트림을 파일로 저장
-
                 for (; ; ) {
-
                     read = is.read(tmpByte);
-
                     if (read <= 0) {
-
                         break;
-
                     }
-
                     fos.write(tmpByte, 0, read); //file 생성
-
                 }
 
                 is.close();
-
                 fos.close();
-
                 conn.disconnect();
-
             } catch (Exception e) {
-
                 e.printStackTrace();
-
             }
-
-
             return null;
 
         }
@@ -641,9 +565,7 @@ public class SingleJjalActivity extends SharedMediaActivity {
         protected void onPostExecute(Void result) {
 
             super.onPostExecute(result);
-
 //
-
             //저장한 이미지 열기
 
 //            Intent i = new Intent(Intent.ACTION_VIEW);
@@ -651,7 +573,6 @@ public class SingleJjalActivity extends SharedMediaActivity {
 //            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             String targetDir = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
-
             File file = new File(targetDir + "/" + fileName + ".jpg");
 
             //type 지정 (이미지)
@@ -665,9 +586,22 @@ public class SingleJjalActivity extends SharedMediaActivity {
 
             if (!isDuplicated) {
                 sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                Toasty.Config.getInstance()
+                        .setTextColor(getResources().getColor(R.color.md_teal_400))
+                        .apply();
+                Toasty.custom(SingleJjalActivity.this, getResources().getString(R.string.download_success_kor), getResources().getDrawable(R.drawable.ic_toasty_success),
+                        Color.WHITE, Toast.LENGTH_SHORT, true, true).show();
+                Toasty.Config.reset(); // Use this if you want to use the configuration above only once
 
-                Toast.makeText(getApplicationContext(), "저장완료!", Toast.LENGTH_SHORT).show();
-            } else Toast.makeText(getApplicationContext(), "이미 존재 !", Toast.LENGTH_SHORT).show();
+            } else {
+                Toasty.Config.getInstance()
+                        .setTextColor(getResources().getColor(R.color.md_red_400))
+                        .apply();
+                Toasty.custom(SingleJjalActivity.this, getResources().getString(R.string.download_failure_kor), getResources().getDrawable(R.drawable.ic_toasty_failure),
+                        Color.WHITE, Toast.LENGTH_SHORT, true, true).show();
+                Toasty.Config.reset(); // Use this if you want to use the configuration above only onc
+
+            }
 
         }
 

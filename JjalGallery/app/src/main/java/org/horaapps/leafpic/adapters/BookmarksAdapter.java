@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
@@ -63,6 +64,14 @@ public class BookmarksAdapter extends ThemedAdapter<BookmarksAdapter.ViewHolder>
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
        if (bookmarks.get(position).path.contains("https://")){
            Log.d("bookmark", bookmarks.get(position).path);
+           if(bookmarks.get(position).path.contains(".GIF?")){
+
+
+
+               holder.gifIcon.setVisibility(View.VISIBLE);
+//               holder.gifIcon.setBackgroundColor(Color.parseColor("#64000000") );
+               holder.gifIcon.setIcon((GoogleMaterial.Icon.gmd_gif));
+           }
            Glide.with(holder.imageView.getContext())
                    .asBitmap()
                    .load(bookmarks.get(position).path)
@@ -72,7 +81,16 @@ public class BookmarksAdapter extends ThemedAdapter<BookmarksAdapter.ViewHolder>
        }
        else{
 
-           Glide.with(holder.imageView.getContext())
+           if(bookmarks.get(position).path.contains(".gif")){
+
+               holder.gifIcon.setVisibility(View.VISIBLE);
+//             holder.gifIcon.setBackgroundColor(Color.parseColor("#64000000") );
+               holder.gifIcon.setIcon((GoogleMaterial.Icon.gmd_gif));
+
+
+           }
+            Glide.with(holder.imageView.getContext())
+                   .asBitmap()
                    .load(imgFile)
                    .apply(options)
                    .thumbnail(0.5f)

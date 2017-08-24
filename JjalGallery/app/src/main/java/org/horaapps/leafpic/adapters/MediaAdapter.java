@@ -17,6 +17,7 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
@@ -180,7 +181,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
 
 
-        if (f.isGif()) {
+        if (f.isGif() || f.getPath().contains(".GIF")) {
 
 //            RequestOptions options = new RequestOptions()
 //                    .signature(f.getSignature())
@@ -196,6 +197,13 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 //
 //            holder.gifIcon.setVisibility(View.VISIBLE);
 //
+
+
+            holder.gifIcon.setVisibility(View.VISIBLE);
+//               holder.gifIcon.setBackgroundColor(Color.parseColor("#64000000") );
+            holder.gifIcon.setIcon((GoogleMaterial.Icon.gmd_gif));
+
+
             RequestOptions options = new RequestOptions()
                     .signature(f.getSignature())
                     .format(DecodeFormat.PREFER_ARGB_8888)
@@ -241,6 +249,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
 
             Glide.with(holder.imageView.getContext())
+
                     .load(f.getUri())
                     .apply(options)
                     .thumbnail(0.5f)

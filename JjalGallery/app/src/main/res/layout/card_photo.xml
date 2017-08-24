@@ -47,7 +47,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:visibility="gone"
-        android:elevation="@dimen/icon_elevation"
+         android:elevation="@dimen/icon_elevation"
         app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-gif"
         tools:targetApi="lollipop" />

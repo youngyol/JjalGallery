@@ -1,6 +1,7 @@
 package org.horaapps.leafpic.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -46,6 +47,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 
 
 public class MainActivity extends SharedMediaActivity {
@@ -180,6 +182,7 @@ public class MainActivity extends SharedMediaActivity {
             @Override
             public void onClick(View v) {
 
+                toolbar.setTitle("사용자 갤러리");
                 initUi();
                 drawer.closeDrawer(GravityCompat.START);
                 getSupportFragmentManager()
@@ -196,15 +199,12 @@ public class MainActivity extends SharedMediaActivity {
             public void onClick(View v) {
 
 
+                toolbar.setTitle("짤 갤러리");
                 drawer.closeDrawer(GravityCompat.START);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content, new JjalsFragment(), "albums")
                         .commit();
-//                Intent intent = new Intent(MainActivity.this, JjalActivity.class);
-//                 startActivity(intent);
-
-                // TODO: 3/25/17 redo
             }
         });
 
@@ -212,6 +212,7 @@ public class MainActivity extends SharedMediaActivity {
             @Override
             public void onClick(View v) {
 
+                toolbar.setTitle("북마크 갤러리");
 
                 if (BookmarkDB.mBookmarkDao.hasBookmark()) {
                     drawer.closeDrawer(GravityCompat.START);
@@ -290,18 +291,14 @@ public class MainActivity extends SharedMediaActivity {
         /** TEXT VIEWS **/
         int color = getTextColor();
         ((TextView) findViewById(R.id.Drawer_Default_Item)).setTextColor(color);
-//        ((TextView) findViewById(R.id.Drawer_Setting_Item)).setTextColor(color);
-//        ((TextView) findViewById(R.id.Drawer_Donate_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.Drawer_Bookmark_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.Drawer_JJal_Item)).setTextColor(color);
 
         /** ICONS **/
         color = getIconColor();
-        ((IconicsImageView) findViewById(R.id.Drawer_Default_Icon)).setColor(color);
-//        ((IconicsImageView) findViewById(R.id.Drawer_Donate_Icon)).setColor(color);
-//        ((IconicsImageView) findViewById(R.id.Drawer_Setting_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.Drawer_Bookmark_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.Drawer_JJal_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.Drawer_Default_Icon)).setIcon(GoogleMaterial.Icon.gmd_image);
+        ((IconicsImageView) findViewById(R.id.Drawer_Bookmark_Icon)).setIcon(GoogleMaterial.Icon.gmd_bookmark_border);
+        ((IconicsImageView) findViewById(R.id.Drawer_JJal_Icon)).setIcon(GoogleMaterial.Icon.gmd_insert_emoticon);
 
         setRecentApp(getString(R.string.app_name));
     }
@@ -318,7 +315,7 @@ public class MainActivity extends SharedMediaActivity {
 
     public void resetToolbar() {
         updateToolbar(
-                getString(R.string.app_name),
+                "사용자 갤러리",
                 GoogleMaterial.Icon.gmd_menu, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -353,14 +350,6 @@ public class MainActivity extends SharedMediaActivity {
 
 
         switch (item.getItemId()) {
-//
-//            case R.id.settings:
- //                return true;
-
-
-            // TODO: 11/21/16 move away from here
-
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -388,8 +377,14 @@ public class MainActivity extends SharedMediaActivity {
                     else
                     {
                         backPressedTime = tempTime;
-                        Toast.makeText(getApplicationContext(), "종료하려면 뒤로가기 버튼을 한 번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
-                    }
+
+                        Toasty.Config.getInstance()
+                                .setTextColor(getResources().getColor(R.color.md_teal_400))
+                                .apply();
+                        Toasty.custom(MainActivity.this, "종료하려면 뒤로가기 버튼을 한 번 더 눌러주세요.", getResources().getDrawable(R.drawable.ic_toasty_success),
+                                Color.WHITE, Toast.LENGTH_SHORT, true, true).show();
+                        Toasty.Config.reset(); // Use this if you want to use the configuration above only once
+                     }
                 }
             }
         } else {
@@ -399,22 +394,7 @@ public class MainActivity extends SharedMediaActivity {
 
 
     }
-//
-////    @Override
-////    public void onBackPressed() {
-//        long tempTime = System.currentTimeMillis();
-//        long intervalTime = tempTime - backPressedTime;
-//
-//        if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime)
-//        {
-//            super.onBackPressed();
-//        }
-//        else
-//        {
-//            backPressedTime = tempTime;
-//            Toast.makeText(getApplicationContext(), "종료하려면 뒤로가기 버튼을 한 번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
-//        }
-////    }
+
 
 
 }

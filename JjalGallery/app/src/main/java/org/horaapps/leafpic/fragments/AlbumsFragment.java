@@ -85,7 +85,7 @@ public class AlbumsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        clearSelected();
+         clearSelected();
         updateToolbar();
     }
 
@@ -153,6 +153,7 @@ public class AlbumsFragment extends BaseFragment {
                     v -> adapter.clearSelected());
         else act.resetToolbar();
     }
+
 
     @Nullable
     @Override

@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,7 +24,6 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SingleJjalActivity;
 import org.horaapps.leafpic.adapters.JjalAdapter;
 import org.horaapps.leafpic.data.Jjal;
-import org.horaapps.leafpic.util.EndlessRecyclerViewScrollListener;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.RecyclerItemClickListener;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
@@ -43,8 +41,6 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
  */
 
 public class JjalsFragment extends BaseFragment {
-
-    private EndlessRecyclerViewScrollListener scrollListener;
 
 
     private int previousTotal = 0;
@@ -127,17 +123,6 @@ public class JjalsFragment extends BaseFragment {
         rv.setLayoutManager(mLayoutManager);
         rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
 
-//        scrollListener = new EndlessRecyclerViewScrollListener(new GridLayoutManager(getContext(), spanCount)) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-//                // Triggered only when new data needs to be appended to the list
-//                // Add whatever code is needed to append new items to the bottom of the list
-////                loadNextDataFromApi(page);
-//            }
-//        };
-
-//        rv.addOnScrollListener(scrollListener);
-
 
         refresh.setOnRefreshListener(this::display);
 
@@ -150,12 +135,9 @@ public class JjalsFragment extends BaseFragment {
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
                     int lastPosition = ((GridLayoutManager) manager).findLastVisibleItemPosition();
-                    Log.d("dASADDD",lastPosition+"     "+adapter.getSize());
-                    if ((lastPosition + 2) >= (adapter.getSize() - 1) && startIndex + GETTING_DATA_COUNT == adapter.getSize()) {
+                     if ((lastPosition + 2) >= (adapter.getSize() - 1) && startIndex + GETTING_DATA_COUNT == adapter.getSize()) {
                         if (startIndex + GETTING_DATA_COUNT < MAX_DATA_COUNT) {
                             startIndex = adapter.getSize();
-                            Log.d("Meojium/MuseumList", "startIndex: " + startIndex);
-
                             adapter.loadMore();
                             adapter.notifyDataSetChanged();
                         }
@@ -165,14 +147,12 @@ public class JjalsFragment extends BaseFragment {
         });
         setListener();
 
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_jjals, null);
-
 
         return v;
     }
@@ -216,7 +196,6 @@ public class JjalsFragment extends BaseFragment {
                 new RecyclerItemClickListener(rv, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Toast.makeText(ctx, position + "  " + jjalItemDatas.get(position).getUrl(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getActivity(), SingleJjalActivity.class);
                         intent.putExtra("jjal", jjalItemDatas);
                         intent.putExtra("position", position);
@@ -240,7 +219,8 @@ public class JjalsFragment extends BaseFragment {
 
         adapter = new JjalAdapter(getContext(), jjalItemDatas);
         rv.setAdapter(adapter);
-
+        startIndex = 0;
+        setListener();
         refresh.setRefreshing(false);
 
     }

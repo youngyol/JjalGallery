@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -50,7 +51,6 @@ import org.horaapps.leafpic.data.bookmark.Bookmark;
 import org.horaapps.leafpic.data.bookmark.BookmarkDB;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
-import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.HackyViewPager;
 
@@ -61,6 +61,7 @@ import java.util.Collections;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import horaapps.org.liz.ColorPalette;
 
 /**
@@ -196,7 +197,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         }
     }
 
-    @CallSuper
+     @CallSuper
     public void updateUiElements() {
         super.updateUiElements();
         /**** Theme ****/
@@ -206,8 +207,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         : ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
 
         toolbar.setPopupTheme(getPopupToolbarStyle());
-
-
         activityBackground.setBackgroundColor(getBackgroundColor());
 
         setStatusBarColor();
@@ -320,12 +319,15 @@ public class SingleMediaActivity extends SharedMediaActivity {
                             // TODO: 21/08/16 handle this better
                             if (StorageHelper.copyFile(getApplicationContext(), new File(imageUri.getPath()), new File(this.album.getPath()))) {
                                 //((ImageFragment) adapter.getRegisteredFragment(this.album.getCurrentMediaIndex())).displayMedia(true);
-                                Toast.makeText(this, R.string.new_file_created, Toast.LENGTH_SHORT).show();
+                                 Toasty.Config.getInstance()
+                                        .setTextColor(getResources().getColor(R.color.md_red_400))
+                                        .apply();
+                                Toasty.custom(this, getResources().getString(R.string.new_file_created_kor), getResources().getDrawable(R.drawable.ic_toasty_success),
+                                        Color.WHITE, Toast.LENGTH_SHORT, true, true).show();
+                                Toasty.Config.reset();
                             }
-                            //adapter.notifyDataSetChanged();
                         } catch (Exception e) {
-                            Log.e("ERROS - uCrop", imageUri.toString(), e);
-                        }
+                         }
                     } else
                         StringUtils.showToast(getApplicationContext(), "errori random");
                     break;
@@ -354,7 +356,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 displayAlbums();
             }
         } else {
-            Toast.makeText(this, R.string.delete_error, Toast.LENGTH_SHORT).show();
+
+            Toasty.Config.getInstance()
+                    .setTextColor(getResources().getColor(R.color.md_red_400))
+                    .apply();
+            Toasty.custom(this, getResources().getString(R.string.delet_file_error_kor) , getResources().getDrawable(R.drawable.ic_toasty_success),
+                    Color.WHITE, Toast.LENGTH_SHORT, true, true).show();
+            Toasty.Config.reset();
+
         }
         adapter.notifyDataSetChanged();
         updatePageTitle(mViewPager.getCurrentItem());
@@ -370,8 +379,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 share.setType(getCurrentMedia().getMimeType());
                 share.putExtra(Intent.EXTRA_STREAM, getCurrentMedia().getUri());
 
-                Toast.makeText(getApplicationContext(),getCurrentMedia().getMimeType()+"    "+getCurrentMedia().getUri()+" ",Toast.LENGTH_SHORT).show();
-                startActivity(Intent.createChooser(share, getString(R.string.send_to)));
+                 startActivity(Intent.createChooser(share, getString(R.string.send_to)));
                 return true;
 
             case R.id.action_edit:
@@ -389,7 +397,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 if(!isBookmarkChecked) {
                     isBookmarkChecked = true;
                     if(BookmarkDB.mBookmarkDao.addBookmark(tmp)) {
-                        Toast.makeText(getApplicationContext(),"insert  "+isBookmarkChecked,Toast.LENGTH_SHORT).show();
+                        Toasty.Config.getInstance()
+                                .setTextColor(getResources().getColor(R.color.md_teal_400))
+                                .apply();
+                        Toasty.custom(this, getResources().getString(R.string.bookmark_success_kor), getResources().getDrawable(R.drawable.ic_toasty_success),
+                                Color.WHITE, Toast.LENGTH_SHORT, true, true).show();
+                        Toasty.Config.reset();
                     }
                 }
                 else{
@@ -414,20 +427,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 });
                 textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (Security.isPasswordOnDelete(getApplicationContext())) {
-
-                            Security.askPassword(SingleMediaActivity.this, new Security.PasswordInterface() {
-                                @Override
-                                public void onSuccess() {
-                                    deleteCurrentMedia();
-                                }
-
-                                @Override
-                                public void onError() {
-                                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else
                             deleteCurrentMedia();
                     }
                 });

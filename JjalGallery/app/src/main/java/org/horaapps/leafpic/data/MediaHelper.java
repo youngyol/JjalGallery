@@ -25,6 +25,17 @@ public class MediaHelper {
         return success;
     }
 
+
+    public static boolean deleteMedia(Context context, String filePath) {
+        File file = new File(filePath);
+        boolean success = StorageHelper.deleteFile(context, file);
+        if (success)
+            context.getContentResolver().delete(external,
+                    MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
+        return success;
+    }
+
+
     public static boolean renameMedia(Context context, Media media, String newName) {
         boolean success = false;
         try {

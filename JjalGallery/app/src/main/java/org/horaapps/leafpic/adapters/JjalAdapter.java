@@ -37,7 +37,7 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
     private ArrayList<Jjal> jjals;
     private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
 
-    private  int size = 10 ;
+    private int size = 10;
     private Drawable placeholder;
     private Context ctx;
 
@@ -49,13 +49,14 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
 
     }
 
-    public void loadMore(){
-        size+=10;
+    public void loadMore() {
+        size += 10;
     }
 
-    public int getSize(){
+    public int getSize() {
         return size;
     }
+
     @Override
     public JjalAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new JjalAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_photo, parent, false));
@@ -68,7 +69,8 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
         holder.gifIcon.setVisibility(View.GONE);
 
 
-        if(jjals.get(position).getUrl().contains(".GIF?raw=")){
+        if (jjals.get(position).getUrl().contains(".GIF?raw=")) {
+            holder.gifIcon.setBackgroundColor(ctx.getResources().getColor(R.color.trans_md_grey_400));
             holder.gifIcon.setVisibility(View.VISIBLE);
             holder.gifIcon.setIcon((GoogleMaterial.Icon.gmd_gif));
         }
@@ -76,16 +78,16 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
                 .format(DecodeFormat.PREFER_ARGB_8888)
                 .centerCrop()
                 .placeholder(placeholder)
-                .override(100, 100)
+                .override(120, 120)
                 .error(org.horaapps.leafpic.R.drawable.ic_error)
                 //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
-
 
         Glide.with(ctx)
                 .asBitmap()
                 .load(jjals.get(position).getUrl())
                 .apply(options)
+                .thumbnail(0.2f)
                 .into(VHItem.imageView);
 
     }
@@ -107,7 +109,7 @@ public class JjalAdapter extends ThemedAdapter<JjalAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        if(jjals.size() > 10) return  size;
+        if (jjals.size() > 10) return size;
         else return jjals.size();
     }
 

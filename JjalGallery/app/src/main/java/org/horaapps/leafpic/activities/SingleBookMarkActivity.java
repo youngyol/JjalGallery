@@ -9,8 +9,10 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -29,6 +31,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -39,6 +42,7 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.ImagesPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
+import org.horaapps.leafpic.data.MediaHelper;
 import org.horaapps.leafpic.data.bookmark.Bookmark;
 import org.horaapps.leafpic.data.bookmark.BookmarkDB;
 import org.horaapps.leafpic.util.Measure;
@@ -46,7 +50,14 @@ import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.HackyViewPager;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,7 +73,11 @@ public class SingleBookMarkActivity extends SharedMediaActivity {
 
     private boolean fullScreenMode, customUri = false;
     private static final String ISLOCKED_ARG = "isLocked";
+    private String deletedPath;
 
+
+    @BindView(R.id.progress_bar_lottie)
+    LottieAnimationView progressBar;
     @BindView(R.id.images_pager)
     HackyViewPager mViewPager;
 
@@ -384,11 +399,21 @@ public class SingleBookMarkActivity extends SharedMediaActivity {
 
 
             case R.id.action_share:
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType(StringUtils.getMimeType(bookmarkImageItems.get(position).path));
-                share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(bookmarkImageItems.get(position).path)));
-                startActivity(Intent.createChooser(share, getString(R.string.send_to)));
+                if(bookmarkImageItems.get(position).path.contains("https://")){
 
+                    deletedPath = " ";
+                    new ImageDownloadAndShare().execute(bookmarkImageItems.get(position).path);
+                    Boolean suc = MediaHelper.deleteMedia(getApplicationContext(), deletedPath);
+                    if(suc) Log.d("dsadsadsadsa","success");
+                    else Log.d("dsadsadsadsa","failure");
+                }
+                else {
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType(StringUtils.getMimeType(bookmarkImageItems.get(position).path));
+                    Log.d("gffffatppath", bookmarkImageItems.get(position).path);
+                    share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(bookmarkImageItems.get(position).path)));
+                    startActivity(Intent.createChooser(share, getString(R.string.send_to)));
+                }
 
                 return true;
 
@@ -449,6 +474,152 @@ public class SingleBookMarkActivity extends SharedMediaActivity {
                 //return super.onOptionsItemSelected(item);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    private class ImageDownloadAndShare extends AsyncTask<String, Void, Void> {
+        /**
+         * 파일명
+         */
+        private String fileName;
+        private String fileImgPath;
+
+        /**
+         * 저장할 폴더
+         */
+        private final String SAVE_FOLDER = "/save_folder";
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            //다운로드 경로를 지정
+            String savePath = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
+
+            File dir = new File(savePath);
+            //상위 디렉토리가 존재하지 않을 경우 생성
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            //파일 이름 :날짜_시간
+            Date day = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.KOREA);
+            fileName = String.valueOf(sdf.format(day));
+
+
+            //웹 서버 쪽 파일이 있는 경로
+            String fileUrl = bookmarkImageItems.get(position).path;
+            String imgName = fileUrl.split("/Animal/")[1].split("\\?raw")[0];
+            String imgType = imgName.split("\\.")[1];
+            fileImgPath = fileName + "." + imgType;
+            //다운로드 폴더에 동일한 파일명이 존재하는지 확인
+
+            if (new File(savePath + "/" + fileName).exists() == false) {
+            } else {
+            }
+
+
+            String localPath = savePath + "/" + fileImgPath;
+
+            try {
+
+                URL imgUrl = new URL(fileUrl);
+
+                //서버와 접속하는 클라이언트 객체 생성
+
+                HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();
+
+                int len = conn.getContentLength();
+
+                byte[] tmpByte = new byte[len];
+
+                //입력 스트림을 구한다
+                InputStream is = conn.getInputStream();
+                File file = new File(localPath);
+                //파일 저장 스트림 생성
+                FileOutputStream fos = new FileOutputStream(file);
+                int read;
+                //입력 스트림을 파일로 저장
+
+                for (; ; ) {
+
+                    read = is.read(tmpByte);
+
+                    if (read <= 0) {
+
+                        break;
+
+                    }
+
+                    fos.write(tmpByte, 0, read); //file 생성
+
+                }
+
+                is.close();
+
+                fos.close();
+
+                conn.disconnect();
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+            }
+
+
+            return null;
+
+        }
+
+
+        @Override
+
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            String savePath = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
+
+            //저장한 이미지 열기
+
+            String localPath = savePath + "/" + fileImgPath;
+            Intent share = new Intent(Intent.ACTION_SEND);
+            Log.d("ADSdsasdasda", localPath);
+//            String targetDir = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
+
+            File file = new File(localPath);
+
+            //type 지정 (이미지)
+            share.setType("image/*");
+            share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            startActivity(Intent.createChooser(share, getString(R.string.send_to)));
+            deletedPath = localPath;
+            progressBar.setVisibility(View.GONE);
+          //  DeleteDir(savePath);
+        }
+
+    }
+
+    void DeleteDir(String path)
+    {
+        File file = new File(path);
+        File[] childFileList = file.listFiles();
+        for(File childFile : childFileList)
+        {
+            if(childFile.isDirectory()) {
+                DeleteDir(childFile.getAbsolutePath());     //하위 디렉토리 루프
+            }
+            else {
+                childFile.delete();    //하위 파일삭제
+            }
+        }
+        file.delete();    //root 삭제
     }
 
 }

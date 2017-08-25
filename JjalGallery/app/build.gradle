@@ -123,6 +123,7 @@ dependencies {
 
 
     implementation 'com.github.GrenderG:Toasty:1.2.5'
+    compile 'com.airbnb.android:lottie:2.2.0'
 
 
 }

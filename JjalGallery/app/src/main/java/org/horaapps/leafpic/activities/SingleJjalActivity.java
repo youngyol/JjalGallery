@@ -32,6 +32,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -43,6 +44,7 @@ import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.JjalsPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
 import org.horaapps.leafpic.data.Jjal;
+import org.horaapps.leafpic.data.MediaHelper;
 import org.horaapps.leafpic.data.bookmark.Bookmark;
 import org.horaapps.leafpic.data.bookmark.BookmarkDB;
 import org.horaapps.leafpic.util.Measure;
@@ -71,7 +73,10 @@ public class SingleJjalActivity extends SharedMediaActivity {
     private boolean fullScreenMode, customUri = false;
     private static final String ISLOCKED_ARG = "isLocked";
     private Bitmap mSaveBm;
+    private String deletedPath;
 
+    @BindView(R.id.progress_bar_lottie)
+    LottieAnimationView progressBar;
     @BindView(R.id.jjals_pager)
     HackyViewPager mViewPager;
 
@@ -387,8 +392,9 @@ public class SingleJjalActivity extends SharedMediaActivity {
 
 
             case R.id.action_share:
+                deletedPath = " ";
                 new ImageDownloadAndShare().execute(jjalImageItems.get(position).getUrl());
-
+                MediaHelper.deleteMedia(getApplicationContext(), deletedPath);
                 break;
             case R.id.action_bookmark:
                 Bookmark tmp = new Bookmark();
@@ -463,6 +469,12 @@ public class SingleJjalActivity extends SharedMediaActivity {
         private final String SAVE_FOLDER = "/Jjal_gallery";
         boolean isDuplicated = false;
 
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
         @Override
         protected Void doInBackground(String... params) {
             //다운로드 경로를 지정
@@ -473,10 +485,6 @@ public class SingleJjalActivity extends SharedMediaActivity {
                 dir.mkdirs();
             }
 
-            //파일 이름 :날짜_시간
-            Date day = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.KOREA);
-            fileName = String.valueOf(sdf.format(day));
 
             //웹 서버 쪽 파일이 있는 경로
             String fileUrl = jjalImageItems.get(position).getUrl();
@@ -530,6 +538,7 @@ public class SingleJjalActivity extends SharedMediaActivity {
 
         protected void onPostExecute(Void result) {
 
+
             super.onPostExecute(result);
             String targetDir = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
             File file = new File(targetDir + "/" + fileName + ".jpg");
@@ -546,6 +555,7 @@ public class SingleJjalActivity extends SharedMediaActivity {
                         Color.WHITE, Toast.LENGTH_SHORT, true, true).show();
                 Toasty.Config.reset(); // Use this if you want to use the configuration above only once
 
+
             } else {
                 Toasty.Config.getInstance()
                         .setTextColor(getResources().getColor(R.color.md_red_400))
@@ -556,89 +566,60 @@ public class SingleJjalActivity extends SharedMediaActivity {
 
             }
 
+            progressBar.setVisibility(View.GONE);
         }
 
     }
 
 
-
     private class ImageDownloadAndShare extends AsyncTask<String, Void, Void> {
-
-
-
         /**
-
          * 파일명
-
          */
-
         private String fileName;
-
-
+        private String fileImgPath;
 
         /**
-
          * 저장할 폴더
-
          */
-
         private final String SAVE_FOLDER = "/save_folder";
 
-
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
         @Override
-
         protected Void doInBackground(String... params) {
-
-
-
             //다운로드 경로를 지정
-
             String savePath = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
 
-
-
             File dir = new File(savePath);
-
             //상위 디렉토리가 존재하지 않을 경우 생성
-
             if (!dir.exists()) {
-
                 dir.mkdirs();
-
             }
 
-
-
             //파일 이름 :날짜_시간
-
             Date day = new Date();
-
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.KOREA);
-
             fileName = String.valueOf(sdf.format(day));
 
 
-
             //웹 서버 쪽 파일이 있는 경로
-
-            String fileUrl = params[0];
-
-
-
+            String fileUrl = jjalImageItems.get(position).getUrl();
+            String imgName = fileUrl.split("/Animal/")[1].split("\\?raw")[0];
+            String imgType = imgName.split("\\.")[1];
+            fileImgPath = fileName + "." + imgType;
             //다운로드 폴더에 동일한 파일명이 존재하는지 확인
 
             if (new File(savePath + "/" + fileName).exists() == false) {
-
             } else {
-
             }
 
 
-
-            String localPath = savePath + "/" + fileName + ".jpg";
-
-
+            String localPath = savePath + "/" + fileImgPath;
 
             try {
 
@@ -646,27 +627,21 @@ public class SingleJjalActivity extends SharedMediaActivity {
 
                 //서버와 접속하는 클라이언트 객체 생성
 
-                HttpURLConnection conn = (HttpURLConnection)imgUrl.openConnection();
+                HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();
 
                 int len = conn.getContentLength();
 
                 byte[] tmpByte = new byte[len];
 
                 //입력 스트림을 구한다
-
                 InputStream is = conn.getInputStream();
-
                 File file = new File(localPath);
-
                 //파일 저장 스트림 생성
-
                 FileOutputStream fos = new FileOutputStream(file);
-
                 int read;
-
                 //입력 스트림을 파일로 저장
 
-                for (;;) {
+                for (; ; ) {
 
                     read = is.read(tmpByte);
 
@@ -693,11 +668,9 @@ public class SingleJjalActivity extends SharedMediaActivity {
             }
 
 
-
             return null;
 
         }
-
 
 
         @Override
@@ -707,21 +680,26 @@ public class SingleJjalActivity extends SharedMediaActivity {
             super.onPostExecute(result);
 
 
+            String savePath = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
 
             //저장한 이미지 열기
 
+            String localPath = savePath + "/" + fileImgPath;
             Intent share = new Intent(Intent.ACTION_SEND);
+            Log.d("ADSdsasdasda", localPath);
+//            String targetDir = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
 
-            String targetDir = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
-
-            File file = new File(targetDir + "/" + fileName + ".jpg");
+            File file = new File(localPath);
 
             //type 지정 (이미지)
 
-            share.setDataAndType(Uri.fromFile(file), "image/*");
+            share.setType("image/*");
             share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
             startActivity(Intent.createChooser(share, getString(R.string.send_to)));
 
+            deletedPath = localPath;
+
+            progressBar.setVisibility(View.GONE);
 
         }
 

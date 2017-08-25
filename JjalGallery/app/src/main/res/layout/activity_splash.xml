@@ -24,16 +24,5 @@
             android:layout_gravity="center_horizontal"
             android:paddingTop="40dp" />
     </LinearLayout>
-    <!--
-    <TextView
-        android:id="@+id/txtLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="LeafPic"
-        android:textColor="@color/md_white_1000"
-        android:textSize="60sp"
-        android:layout_marginBottom="25dp"
-        />
-        -->
+
 </RelativeLayout>

@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -77,7 +78,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
     public static final String ACTION_OPEN_ALBUM = "org.horaapps.leafpic.intent.VIEW_ALBUM";
     private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
     private boolean isBookmarkChecked = false;
-
 
     @BindView(R.id.photos_pager)
     HackyViewPager mViewPager;
